@@ -15,7 +15,5 @@ namespace Monitoring4M1Ev2.Model.User
         public int UserLineId { get; set; }
         public string Line { get; set; }
         public int UserDetailId { get; set; }
-        [JsonIgnore]
-        public UserDetail UserDetail { get; set; }
     }
 }

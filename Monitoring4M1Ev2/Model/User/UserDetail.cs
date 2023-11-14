@@ -20,8 +20,7 @@ namespace Monitoring4M1Ev2.Model.User
         public bool IsActive { get; set; } = true;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime UpdatedDate { get; set; }
-
-        public virtual List<UserLine> UserLines { get; set; }
+        public List<UserLine> UserLines { get; set; }
     }
 
     public class UserDetailDto

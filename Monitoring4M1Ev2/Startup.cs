@@ -31,9 +31,18 @@ namespace Monitoring4M1Ev2
             services.AddCors();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Monitoring")));
+            services.AddDbContext<BarcodeDbContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("Barcode")));
+            services.AddDbContext<ContractorDbContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("Contractor")));
+            services.AddDbContext<JsphDbContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("JSPH")));
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOperatorService, OperatorService>();
+            services.AddScoped<IBarcodeService, BarcodeService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IM4EService, M4EService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }

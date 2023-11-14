@@ -1,21 +1,20 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Monitoring4M1Ev2.Model.Operator
+namespace Monitoring4M1Ev2.Model.Framework_4M_1E
 {
-    public class OperatorSafetyAnswer
+    public class Trainee
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AnswerId { get; set; }
-        [MaxLength(1000)]
-        public string Answer { get; set; }
+        public int TraineeId { get; set; }
+        public string EmployeeId { get; set; }
+        public string Name { get; set; }
         public DateTime DateAdded { get; set; }
-        public int QualificationId { get; set; }
+        public int ManId { get; set; }
     }
 }

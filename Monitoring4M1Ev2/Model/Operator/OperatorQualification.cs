@@ -19,12 +19,12 @@ namespace Monitoring4M1Ev2.Model.Operator
         public OperatorDetail OperatorDetail { get; set; }
         public string Process { get; set; }
         public bool OverallAssessment { get; set; } = false;
-        public int InCharge { get; set; } // User with Trainer role
-        [JsonIgnore]
-        public UserDetail UserDetail { get; set; }
+        public int InCharge { get; set; } 
+        [ForeignKey("InCharge")]
+        public UserDetail InChargeDetails { get; set; } // for test
         public DateTime DateAdded { get; set; } = DateTime.Now;
 
-        public List<OperatorSafetyAnswer> OperatorSafetyAnswers { get; set; }
+        public OperatorSafetyAnswer OperatorSafetyAnswers { get; set; }
         public List<OperatorEvaluation> OperatorEvaluations { get; set; }
     }
 
@@ -32,6 +32,6 @@ namespace Monitoring4M1Ev2.Model.Operator
     {
         public int OperatorDetailId { get; set; }
         public string Process { get; set; }
-        public int InChange { get; set; }
+        public int InCharge { get; set; }
     }
 }
