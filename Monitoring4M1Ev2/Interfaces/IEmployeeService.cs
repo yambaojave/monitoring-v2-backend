@@ -10,5 +10,7 @@ namespace Monitoring4M1Ev2.Interfaces
     {
         List<Employee> GetJsphEmployees();
         List<Employee> GetContractorEmployees();
+        Employee GetDetails(string emplId);
+        bool IsValidEmployeeFormat(string input);
     }
 }

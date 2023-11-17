@@ -9,13 +9,20 @@ namespace Monitoring4M1Ev2.Interfaces
     public interface IOperatorService
     {
         // CREATION LIST OF DATA
-        void AddOperator(OperatorDetailDto dto);
-        void AddOperatorQualification(OperatorQualificationDto dto);
+        OperatorDetail AddOperator(OperatorDetailDto dto);
+        List<OperatorDetail> GetAllOperators();
+        OperatorQualification AddOperatorQualification(OperatorQualificationDto dto);
         void AddOperatorSafetyAnswer(string answer, int qualificationId);
         void AddUpdateEvaluation(EvaluationDto dto, ItemEvaluationDto itemDto, string process, int evalId, int qualifyId);
 
         // GETTING LIST OF DATA
-        object GetOperator(int id);
-        
+        object GetOperator(string emplId);
+
+        // DATA CHECKING
+        bool CheckDataExists<T>(T data, string table) where T : IConvertible;
+
+        // Update Date
+        void OperatorUpdateTime(int id);
+
     }
 }

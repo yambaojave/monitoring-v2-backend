@@ -37,7 +37,6 @@ namespace Monitoring4M1Ev2.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     OperatorEmployeeId = table.Column<string>(maxLength: 50, nullable: true),
                     OperatorName = table.Column<string>(maxLength: 100, nullable: true),
-                    Model = table.Column<string>(maxLength: 20, nullable: true),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateUpdate = table.Column<DateTime>(nullable: false),
                     Active = table.Column<bool>(nullable: false)
@@ -222,7 +221,8 @@ namespace Monitoring4M1Ev2.Migrations
                     QualificationId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     OperatorDetailId = table.Column<int>(nullable: false),
-                    Process = table.Column<string>(nullable: true),
+                    Model = table.Column<string>(maxLength: 50, nullable: true),
+                    Process = table.Column<string>(maxLength: 50, nullable: true),
                     OverallAssessment = table.Column<bool>(nullable: false),
                     InCharge = table.Column<int>(nullable: false),
                     DateAdded = table.Column<DateTime>(nullable: false)
@@ -439,8 +439,8 @@ namespace Monitoring4M1Ev2.Migrations
                 {
                     EvaluationId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CheckName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    CheckName = table.Column<string>(maxLength: 100, nullable: true),
+                    Description = table.Column<string>(maxLength: 250, nullable: true),
                     Pc1 = table.Column<bool>(nullable: true),
                     Pc2 = table.Column<bool>(nullable: true),
                     Pc3 = table.Column<bool>(nullable: true),
@@ -587,8 +587,7 @@ namespace Monitoring4M1Ev2.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OperatorQualifications_OperatorDetailId",
                 table: "OperatorQualifications",
-                column: "OperatorDetailId",
-                unique: true);
+                column: "OperatorDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OperatorSafetyAnswers_QualificationId",

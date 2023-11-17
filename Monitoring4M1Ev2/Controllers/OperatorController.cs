@@ -20,29 +20,56 @@ namespace Monitoring4M1Ev2.Controllers
             _operatorService = operatorService;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult GetOperator(int id)
+        [HttpGet("all")]
+        public ActionResult GetAllOperator()
         {
-            return Ok(_operatorService.GetOperator(id));
+            return Ok(_operatorService.GetAllOperators());
+        }
+
+        [HttpGet("{data}")]
+        public ActionResult GetOperator(string data)
+        {
+            if (!_operatorService.CheckDataExists(data, "OPERATOR"))
+            {
+                return NotFound(new { error = $"No operator with Employee ID {data} found." });
+            }
+
+            return Ok(_operatorService.GetOperator(data.ToString()));
         }
 
         [HttpPost]
         public ActionResult PostOperator([FromBody] OperatorDetailDto dto)
         {
-            _operatorService.AddOperator(dto);
-            return Ok();
+            if(_operatorService.CheckDataExists(dto.OperatorEmployeeId, "OPERATOR"))
+            {
+                return Conflict(new { error = $"Employee {dto.OperatorEmployeeId} already exists in operator module." });
+            }
+
+            var newOperator = _operatorService.AddOperator(dto);
+            return Ok(newOperator);
         }
 
         [HttpPost("qualification")]
         public ActionResult PostQualification([FromBody] OperatorQualificationDto dto)
         {
-            _operatorService.AddOperatorQualification(dto);
-            return Ok();
+            //if (_operatorService.CheckDataExists(dto.OperatorDetailId, "QUALIFICATION"))
+            //{
+            //    return Conflict(new { error = $"Employee {dto.OperatorEmployeeId} already exists in operator module." });
+            //}
+
+            var newQualification = _operatorService.AddOperatorQualification(dto);
+            //_operatorService.OperatorUpdateTime(dto.OperatorDetailId);
+            return Ok(newQualification);
         } 
 
         [HttpPost("{id}/answer")]
         public ActionResult PostAnswer(int id, [FromBody] string answer)
         {
+            if (_operatorService.CheckDataExists(id, "ANSWER"))
+            {
+                return Conflict(new { error = $"Employee qualification sheet already has answer." });
+            }
+
             _operatorService.AddOperatorSafetyAnswer(answer, id);
             return Ok();
         }

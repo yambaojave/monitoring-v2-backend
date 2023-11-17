@@ -15,8 +15,10 @@ namespace Monitoring4M1Ev2.Model.Operator
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int QualificationId { get; set; }
         public int OperatorDetailId { get; set; }
-        [JsonIgnore]
         public OperatorDetail OperatorDetail { get; set; }
+        [MaxLength(50)]
+        public string Model { get; set; }
+        [MaxLength(50)]
         public string Process { get; set; }
         public bool OverallAssessment { get; set; } = false;
         public int InCharge { get; set; } 
@@ -31,6 +33,7 @@ namespace Monitoring4M1Ev2.Model.Operator
     public class OperatorQualificationDto
     {
         public int OperatorDetailId { get; set; }
+        public string Model { get; set; }
         public string Process { get; set; }
         public int InCharge { get; set; }
     }

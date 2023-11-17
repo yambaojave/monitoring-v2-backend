@@ -394,9 +394,6 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<DateTime>("DateUpdate");
 
-                    b.Property<string>("Model")
-                        .HasMaxLength(20);
-
                     b.Property<string>("OperatorEmployeeId")
                         .HasMaxLength(50);
 
@@ -414,13 +411,15 @@ namespace Monitoring4M1Ev2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CheckName");
+                    b.Property<string>("CheckName")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<DateTime>("DateUpdated");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(250);
 
                     b.Property<bool?>("Pc1");
 
@@ -503,18 +502,21 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<int>("InCharge");
 
+                    b.Property<string>("Model")
+                        .HasMaxLength(50);
+
                     b.Property<int>("OperatorDetailId");
 
                     b.Property<bool>("OverallAssessment");
 
-                    b.Property<string>("Process");
+                    b.Property<string>("Process")
+                        .HasMaxLength(50);
 
                     b.HasKey("QualificationId");
 
                     b.HasIndex("InCharge");
 
-                    b.HasIndex("OperatorDetailId")
-                        .IsUnique();
+                    b.HasIndex("OperatorDetailId");
 
                     b.ToTable("OperatorQualifications");
                 });
@@ -712,8 +714,8 @@ namespace Monitoring4M1Ev2.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Monitoring4M1Ev2.Model.Operator.OperatorDetail", "OperatorDetail")
-                        .WithOne("OperatorQualification")
-                        .HasForeignKey("Monitoring4M1Ev2.Model.Operator.OperatorQualification", "OperatorDetailId")
+                        .WithMany("OperatorQualifications")
+                        .HasForeignKey("OperatorDetailId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

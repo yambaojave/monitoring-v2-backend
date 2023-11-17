@@ -19,73 +19,78 @@ namespace Monitoring4M1Ev2.Services
             _db = db;
         }
 
-        public object GetOperator(int id)
+        public object GetOperator(string emplId)
         {
             object fullDetails = _db.OperatorDetails
-                .Include(e => e.OperatorQualification)
+                .Include(e => e.OperatorQualifications)
                     .ThenInclude(e => e.OperatorSafetyAnswers)
-                .Include(e => e.OperatorQualification)
+                .Include(e => e.OperatorQualifications)
                     .ThenInclude(e => e.OperatorEvaluations)
-                .Include(e => e.OperatorQualification)
+                .Include(e => e.OperatorQualifications)
                     .ThenInclude(e => e.InChargeDetails)
                 .Select(od => new
                 {
                     od.OperatorDetailId,
                     od.OperatorEmployeeId,
                     od.OperatorName,
-                    od.Model,
                     od.DateAdded,
                     od.DateUpdate,
                     od.Active,
-                    qualifications = new
+                    qualifications = od.OperatorQualifications.Select(oq => new
                     {
-                        od.OperatorQualification.QualificationId,
-                        od.OperatorQualification.Process,
-                        od.OperatorQualification.OverallAssessment,
-                        trainer = $"{od.OperatorQualification.InChargeDetails.LastName}, {od.OperatorQualification.InChargeDetails.FirstName}",
-                        od.OperatorQualification.DateAdded,
-                        operatorSafetyAnswers = new
+                        oq.QualificationId,
+                        oq.Model,
+                        oq.Process,
+                        oq.OverallAssessment,
+                        trainer = $"{oq.InChargeDetails.LastName}, {oq.InChargeDetails.FirstName}",
+                        operatorSafetyAnswers = (oq.OperatorSafetyAnswers != null) ? new
                         {
-                            od.OperatorQualification.OperatorSafetyAnswers.AnswerId,
-                            od.OperatorQualification.OperatorSafetyAnswers.Answer,
-                            od.OperatorQualification.OperatorSafetyAnswers.DateAdded,
-                        },
-                        operatorEvaluations = od.OperatorQualification.OperatorEvaluations
-                    }
+                            oq.OperatorSafetyAnswers.AnswerId,
+                            oq.OperatorSafetyAnswers.Answer,
+                            oq.OperatorSafetyAnswers.DateAdded
+                        } : null,
+                        operatorEvaluations = oq.OperatorEvaluations
+                    })
                 })
 
-                .FirstOrDefault(e => e.OperatorDetailId == id);
+                .FirstOrDefault(e => e.OperatorEmployeeId == emplId);
                 
-
-
-
             return fullDetails;
         }
 
-        public void AddOperator(OperatorDetailDto dto)
+        public List<OperatorDetail> GetAllOperators()
+        {
+            return _db.OperatorDetails.ToList();
+        }
+
+        public OperatorDetail AddOperator(OperatorDetailDto dto)
         {
             var newOperator = new OperatorDetail
             {
                 OperatorEmployeeId = dto.OperatorEmployeeId,
                 OperatorName = dto.OperatorName,
-                Model = dto.Model,
             };
 
             _db.OperatorDetails.Add(newOperator);
             _db.SaveChanges();
+
+            return newOperator;
         }
 
-        public void AddOperatorQualification(OperatorQualificationDto dto)
+        public OperatorQualification AddOperatorQualification(OperatorQualificationDto dto)
         {
             var newQualification = new OperatorQualification
             {
                 OperatorDetailId = dto.OperatorDetailId,
+                Model = dto.Model,
                 Process = dto.Process,
                 InCharge = dto.InCharge
             };
 
             _db.OperatorQualifications.Add(newQualification);
             _db.SaveChanges();
+
+            return newQualification;
         }
 
         public void AddOperatorSafetyAnswer(string answer, int qualificationId)
@@ -170,6 +175,9 @@ namespace Monitoring4M1Ev2.Services
 
         public void EvaluateAssessment(int qualificationId)
         {
+            /*
+             *  TODO : Evaluating of Operator training performance 
+             */
             var qualification = _db.OperatorQualifications.Find(qualificationId);
             var evaluation = _db.OperatorEvaluations.Find(qualification.QualificationId);
 
@@ -178,8 +186,36 @@ namespace Monitoring4M1Ev2.Services
             PropertyInfo[] boolProperties = type.GetProperties()
                 .Where(p => p.PropertyType == typeof(bool?))
                 .ToArray();
+        }
 
+        /*
+         *  CheckDataExists<T1, T2>(T1 data1, T2 data2)
+         *  <T> data can be any value
+         */
 
+        public bool CheckDataExists<T>(T data, string table) where T : IConvertible
+        {
+            switch (table)
+            {
+                case "OPERATOR":
+                    return _db.OperatorDetails.Any(e => e.OperatorEmployeeId == data.ToString());
+
+                // In standby due to lot of situations can happen
+                case "QUALIFICATION": 
+                    return _db.OperatorQualifications.Any(e => e.QualificationId == Convert.ToInt32(data));
+                case "EVALUATION":
+                    return _db.OperatorEvaluations.Any(e => e.EvaluationId == Convert.ToInt32(data));
+                case "ANSWER":
+                    return _db.OperatorSafetyAnswers.Any(e => e.QualificationId == Convert.ToInt32(data));
+            }
+            return false;
+        }
+
+        public void OperatorUpdateTime(int id)
+        {
+            var dateToUpdate = _db.OperatorDetails.Find(id);
+            dateToUpdate.DateUpdate = DateTime.Now;
+            _db.SaveChanges();
         }
 
 

@@ -19,6 +19,9 @@ namespace Monitoring4M1Ev2.Services
             _contractor = contractor;
         }
 
+        string jsphEmployeeChecking = "O-000";
+        string contractEmployeeChecking = "O-";
+
         /*
          *  Getting of all active employees either from JSPH or Contractor 
          */
@@ -30,6 +33,23 @@ namespace Monitoring4M1Ev2.Services
         public List<Employee> GetContractorEmployees()
         {
             return _contractor.employee.Where(e => e.active == true).ToList();
+        }
+
+        public Employee GetDetails(string emplId)
+        {
+            var operatorDetails = emplId.Contains(jsphEmployeeChecking)
+                ? GetJsphEmployees().FirstOrDefault(e => e.clean_emp == emplId.Replace(jsphEmployeeChecking, string.Empty))
+                : GetContractorEmployees().FirstOrDefault(e => e.emp_Card == String.Concat("00", emplId.Replace(contractEmployeeChecking, string.Empty)));
+
+            return operatorDetails;
+        }
+
+        public bool IsValidEmployeeFormat(string input)
+        {
+            bool containsJsphFormat = input.Contains(jsphEmployeeChecking);
+            bool containsContractFormat = input.Contains(contractEmployeeChecking);
+
+            return containsJsphFormat || containsContractFormat;
         }
 
     }
