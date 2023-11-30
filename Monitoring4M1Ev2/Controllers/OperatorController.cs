@@ -37,6 +37,12 @@ namespace Monitoring4M1Ev2.Controllers
             return Ok(_operatorService.GetOperator(data.ToString()));
         }
 
+        [HttpGet("{data}/current")]
+        public ActionResult GetCurrentQualification(string data)
+        {
+            return Ok(_operatorService.GetCurrentQualification(data));
+        }
+
         [HttpPost]
         public ActionResult PostOperator([FromBody] OperatorDetailDto dto)
         {
@@ -58,11 +64,18 @@ namespace Monitoring4M1Ev2.Controllers
             //}
 
             var newQualification = _operatorService.AddOperatorQualification(dto);
-            //_operatorService.OperatorUpdateTime(dto.OperatorDetailId);
+            _operatorService.OperatorUpdateTime(dto.OperatorDetailId);
             return Ok(newQualification);
         } 
 
-        [HttpPost("{id}/answer")]
+        [HttpPut("qualification/{id}")]
+        public ActionResult PutQualificationById(int id, [FromBody] OperatorQualificationDto dto)
+        {
+            _operatorService.UpdateOperatorQualificationById(id, dto);
+            return NoContent();
+        }
+
+        [HttpPost("answer/{id}")]
         public ActionResult PostAnswer(int id, [FromBody] string answer)
         {
             if (_operatorService.CheckDataExists(id, "ANSWER"))
@@ -70,23 +83,53 @@ namespace Monitoring4M1Ev2.Controllers
                 return Conflict(new { error = $"Employee qualification sheet already has answer." });
             }
 
-            _operatorService.AddOperatorSafetyAnswer(answer, id);
-            return Ok();
+            var newAnswer = _operatorService.AddOperatorSafetyAnswer(answer, id);
+            return Ok(newAnswer);
+        }
+
+        [HttpPut("answer/{id}")]
+        public ActionResult PutAnswerById(int id, [FromBody] string answer)
+        {
+            _operatorService.UpdateOperatorSafetyAnswerById(answer, id);
+            return NoContent();
         }
 
         [HttpPost("evaluation")]
-        public ActionResult PostEvaluation([FromBody] CombinedEvaluation dto)
+        public ActionResult PostEvaluation([FromBody] EvaluationDto dto)
         {
-            _operatorService.AddUpdateEvaluation(dto.EvaluationDto, dto.ItemEvaluationDto, dto.process, dto.evalId, dto.qualifyId);
-            return Ok();
+            var newEvaluation = _operatorService.AddEvaluation(dto);
+            return Ok(newEvaluation);
         }
 
         [HttpPut("evaluation")]
-        public ActionResult PutEvaluation([FromBody] CombinedEvaluation dto)
+        public ActionResult PutEvaluation([FromBody] UpdateEvaluationDto dto)
         {
-            _operatorService.AddUpdateEvaluation(dto.EvaluationDto, dto.ItemEvaluationDto, dto.process, dto.evalId, dto.qualifyId);
+            _operatorService.UpdateEvaluation(dto.ItemEvaluationDto, dto.EvaluationId);
             return Ok();
         }
+
+        [HttpDelete("evaluation/{id}")]
+        public ActionResult DeleteEvaluation(int id)
+        {
+            _operatorService.DeleteEvaluation(id);
+            return NoContent();
+        }
+
+        [HttpGet("pcsresult/{evalId}")]
+        public ActionResult GetPcsResultByEvalId(int evalId)
+        {
+            return Ok(_operatorService.GetOperatorQualificationPcsByEvalId(evalId));
+        }
+
+        [HttpPost("pcsresult")]
+        public ActionResult PostPcsResult([FromBody] OperatorEvaluationPcsDto dto)
+        {
+            var newPcsResult = _operatorService.AddPcsResult(dto);
+
+            return Ok(newPcsResult);
+        }
+
+
 
 
     }

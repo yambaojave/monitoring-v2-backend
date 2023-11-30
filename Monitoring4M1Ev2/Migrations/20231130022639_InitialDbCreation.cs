@@ -441,36 +441,36 @@ namespace Monitoring4M1Ev2.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CheckName = table.Column<string>(maxLength: 100, nullable: true),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
-                    Pc1 = table.Column<bool>(nullable: true),
-                    Pc2 = table.Column<bool>(nullable: true),
-                    Pc3 = table.Column<bool>(nullable: true),
-                    Pc4 = table.Column<bool>(nullable: true),
-                    Pc5 = table.Column<bool>(nullable: true),
-                    Pc6 = table.Column<bool>(nullable: true),
-                    Pc7 = table.Column<bool>(nullable: true),
-                    Pc8 = table.Column<bool>(nullable: true),
-                    Pc9 = table.Column<bool>(nullable: true),
-                    Pc10 = table.Column<bool>(nullable: true),
-                    Pc11 = table.Column<bool>(nullable: true),
-                    Pc12 = table.Column<bool>(nullable: true),
-                    Pc13 = table.Column<bool>(nullable: true),
-                    Pc14 = table.Column<bool>(nullable: true),
-                    Pc15 = table.Column<bool>(nullable: true),
-                    Pc16 = table.Column<bool>(nullable: true),
-                    Pc17 = table.Column<bool>(nullable: true),
-                    Pc18 = table.Column<bool>(nullable: true),
-                    Pc19 = table.Column<bool>(nullable: true),
-                    Pc20 = table.Column<bool>(nullable: true),
-                    Pc21 = table.Column<bool>(nullable: true),
-                    Pc22 = table.Column<bool>(nullable: true),
-                    Pc23 = table.Column<bool>(nullable: true),
-                    Pc24 = table.Column<bool>(nullable: true),
-                    Pc25 = table.Column<bool>(nullable: true),
-                    Pc26 = table.Column<bool>(nullable: true),
-                    Pc27 = table.Column<bool>(nullable: true),
-                    Pc28 = table.Column<bool>(nullable: true),
-                    Pc29 = table.Column<bool>(nullable: true),
-                    Pc30 = table.Column<bool>(nullable: true),
+                    Pc1 = table.Column<bool>(nullable: false),
+                    Pc2 = table.Column<bool>(nullable: false),
+                    Pc3 = table.Column<bool>(nullable: false),
+                    Pc4 = table.Column<bool>(nullable: false),
+                    Pc5 = table.Column<bool>(nullable: false),
+                    Pc6 = table.Column<bool>(nullable: false),
+                    Pc7 = table.Column<bool>(nullable: false),
+                    Pc8 = table.Column<bool>(nullable: false),
+                    Pc9 = table.Column<bool>(nullable: false),
+                    Pc10 = table.Column<bool>(nullable: false),
+                    Pc11 = table.Column<bool>(nullable: false),
+                    Pc12 = table.Column<bool>(nullable: false),
+                    Pc13 = table.Column<bool>(nullable: false),
+                    Pc14 = table.Column<bool>(nullable: false),
+                    Pc15 = table.Column<bool>(nullable: false),
+                    Pc16 = table.Column<bool>(nullable: false),
+                    Pc17 = table.Column<bool>(nullable: false),
+                    Pc18 = table.Column<bool>(nullable: false),
+                    Pc19 = table.Column<bool>(nullable: false),
+                    Pc20 = table.Column<bool>(nullable: false),
+                    Pc21 = table.Column<bool>(nullable: false),
+                    Pc22 = table.Column<bool>(nullable: false),
+                    Pc23 = table.Column<bool>(nullable: false),
+                    Pc24 = table.Column<bool>(nullable: false),
+                    Pc25 = table.Column<bool>(nullable: false),
+                    Pc26 = table.Column<bool>(nullable: false),
+                    Pc27 = table.Column<bool>(nullable: false),
+                    Pc28 = table.Column<bool>(nullable: false),
+                    Pc29 = table.Column<bool>(nullable: false),
+                    Pc30 = table.Column<bool>(nullable: false),
                     Remarks = table.Column<string>(nullable: true),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateUpdated = table.Column<DateTime>(nullable: false),
@@ -505,6 +505,28 @@ namespace Monitoring4M1Ev2.Migrations
                         column: x => x.QualificationId,
                         principalTable: "OperatorQualifications",
                         principalColumn: "QualificationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OperatorEvaluationPcs",
+                columns: table => new
+                {
+                    PcsId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    PcsNo = table.Column<string>(nullable: true),
+                    Result = table.Column<string>(nullable: true),
+                    DateAdded = table.Column<DateTime>(nullable: false),
+                    EvaluationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperatorEvaluationPcs", x => x.PcsId);
+                    table.ForeignKey(
+                        name: "FK_OperatorEvaluationPcs_OperatorEvaluations_EvaluationId",
+                        column: x => x.EvaluationId,
+                        principalTable: "OperatorEvaluations",
+                        principalColumn: "EvaluationId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -575,6 +597,11 @@ namespace Monitoring4M1Ev2.Migrations
                 column: "MethodId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OperatorEvaluationPcs_EvaluationId",
+                table: "OperatorEvaluationPcs",
+                column: "EvaluationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OperatorEvaluations_QualificationId",
                 table: "OperatorEvaluations",
                 column: "QualificationId");
@@ -636,7 +663,7 @@ namespace Monitoring4M1Ev2.Migrations
                 name: "MethodSystemRemarks");
 
             migrationBuilder.DropTable(
-                name: "OperatorEvaluations");
+                name: "OperatorEvaluationPcs");
 
             migrationBuilder.DropTable(
                 name: "OperatorSafetyAnswers");
@@ -657,19 +684,22 @@ namespace Monitoring4M1Ev2.Migrations
                 name: "Methods");
 
             migrationBuilder.DropTable(
-                name: "OperatorQualifications");
+                name: "OperatorEvaluations");
 
             migrationBuilder.DropTable(
                 name: "Mans");
+
+            migrationBuilder.DropTable(
+                name: "OperatorQualifications");
+
+            migrationBuilder.DropTable(
+                name: "M4EHeaders");
 
             migrationBuilder.DropTable(
                 name: "UserDetails");
 
             migrationBuilder.DropTable(
                 name: "OperatorDetails");
-
-            migrationBuilder.DropTable(
-                name: "M4EHeaders");
         }
     }
 }

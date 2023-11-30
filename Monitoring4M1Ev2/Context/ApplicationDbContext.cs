@@ -26,6 +26,7 @@ namespace Monitoring4M1Ev2.Context
         public DbSet<OperatorEvaluation> OperatorEvaluations { get; set; }
         public DbSet<OperatorQualification> OperatorQualifications { get; set; }
         public DbSet<OperatorSafetyAnswer> OperatorSafetyAnswers { get; set; }
+        public DbSet<OperatorEvaluationPcs> OperatorEvaluationPcs { get; set; }
 
         /*
          *  4M1E Framework Dataset

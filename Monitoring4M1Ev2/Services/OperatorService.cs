@@ -42,6 +42,7 @@ namespace Monitoring4M1Ev2.Services
                         oq.Model,
                         oq.Process,
                         oq.OverallAssessment,
+                        oq.DateAdded,
                         trainer = $"{oq.InChargeDetails.LastName}, {oq.InChargeDetails.FirstName}",
                         operatorSafetyAnswers = (oq.OperatorSafetyAnswers != null) ? new
                         {
@@ -56,6 +57,44 @@ namespace Monitoring4M1Ev2.Services
                 .FirstOrDefault(e => e.OperatorEmployeeId == emplId);
                 
             return fullDetails;
+        }
+
+        public object GetCurrentQualification(string empId)
+        {
+            OperatorDetail op = GetOperatorId(empId);
+            OperatorQualification q = _db.OperatorQualifications
+                .Include(e => e.InChargeDetails)
+                .Include(e => e.OperatorEvaluations)
+                .Include(e => e.OperatorSafetyAnswers)
+                .FirstOrDefault(e => e.OperatorDetailId == op.OperatorDetailId && e.OverallAssessment == false && e.DateAdded.Year == DateTime.Now.Year);
+
+            object[] qArray = new object[]
+            {
+                new
+                {
+                    q.QualificationId,
+                    q.Model,
+                    q.Process,
+                    q.OverallAssessment,
+                    q.DateAdded,
+                    trainer = $"{q.InChargeDetails.LastName}, {q.InChargeDetails.FirstName}",
+                    q.OperatorSafetyAnswers,
+                    q.OperatorEvaluations
+                }
+            };
+
+            object newQualificationFormat = new
+            {
+                op.OperatorDetailId,
+                op.OperatorEmployeeId,
+                op.OperatorName,
+                op.DateAdded,
+                op.DateUpdate,
+                op.Active,
+                qualifications = qArray
+            };
+
+            return newQualificationFormat;
         }
 
         public List<OperatorDetail> GetAllOperators()
@@ -93,7 +132,17 @@ namespace Monitoring4M1Ev2.Services
             return newQualification;
         }
 
-        public void AddOperatorSafetyAnswer(string answer, int qualificationId)
+        public void UpdateOperatorQualificationById(int id, OperatorQualificationDto dto)
+        {
+            var qualification = _db.OperatorQualifications.Find(id);
+
+            qualification.Model = dto.Model;
+            qualification.Process = dto.Process;
+
+            _db.SaveChanges();
+        }
+
+        public OperatorSafetyAnswer AddOperatorSafetyAnswer(string answer, int qualificationId)
         {
             var newAnswer = new OperatorSafetyAnswer
             {
@@ -104,72 +153,92 @@ namespace Monitoring4M1Ev2.Services
 
             _db.OperatorSafetyAnswers.Add(newAnswer);
             _db.SaveChanges();
+
+            return newAnswer;
         }
 
-        public void AddUpdateEvaluation(EvaluationDto dto, ItemEvaluationDto itemDto, string process, int evalId, int qualifyId)
+        public void UpdateOperatorSafetyAnswerById(string answer, int id)
         {
-            if(process == "ADD")
-            {
-                var newEvaluation = new OperatorEvaluation
-                {
-                    CheckName = dto.CheckName,
-                    Description = dto.Description,
-                    Remarks = dto.Remarks,
-                    QualificationId = qualifyId,
-                    DateAdded = DateTime.Now
-                };
+            var a = _db.OperatorSafetyAnswers.Find(id);
 
-                _db.OperatorEvaluations.Add(newEvaluation);
-                _db.SaveChanges();
-
-                if(itemDto != null)
-                {
-                    UpdateEvaluation(newEvaluation.EvaluationId, itemDto);
-                }
-            }
-            else
-            {
-                UpdateEvaluation(evalId, itemDto);
-            }
+            a.Answer = answer;
+            _db.SaveChanges();
+            
         }
 
-        public void UpdateEvaluation(int evaluationId, ItemEvaluationDto dto)
+        public OperatorEvaluation AddEvaluation(EvaluationDto dto)
+        {
+
+            var newEvaluation = new OperatorEvaluation
+            {
+                CheckName = dto.CheckName,
+                Description = dto.Description,
+                Remarks = dto.Remarks,
+                QualificationId = dto.QualificationId,
+                DateAdded = DateTime.Now
+            };
+
+            _db.OperatorEvaluations.Add(newEvaluation);
+            _db.SaveChanges();
+
+            return newEvaluation;
+
+        }
+
+        public void UpdateEvaluation(EvaluationDto dto, int evaluationId)
         {
             var evaluation = _db.OperatorEvaluations.Find(evaluationId);
 
-            evaluation.Pc1 = dto.Pc1;
-            evaluation.Pc2 = dto.Pc2;
-            evaluation.Pc3 = dto.Pc3;
-            evaluation.Pc4 = dto.Pc4;
-            evaluation.Pc5 = dto.Pc5;
-            evaluation.Pc6 = dto.Pc6;
-            evaluation.Pc7 = dto.Pc7;
-            evaluation.Pc8 = dto.Pc8;
-            evaluation.Pc9 = dto.Pc9;
-            evaluation.Pc10 = dto.Pc10;
-            evaluation.Pc11 = dto.Pc11;
-            evaluation.Pc12 = dto.Pc12;
-            evaluation.Pc13 = dto.Pc13;
-            evaluation.Pc14 = dto.Pc14;
-            evaluation.Pc15 = dto.Pc15;
-            evaluation.Pc16 = dto.Pc16;
-            evaluation.Pc17 = dto.Pc17;
-            evaluation.Pc18 = dto.Pc18;
-            evaluation.Pc19 = dto.Pc19;
-            evaluation.Pc20 = dto.Pc20;
-            evaluation.Pc21 = dto.Pc21;
-            evaluation.Pc22 = dto.Pc22;
-            evaluation.Pc23 = dto.Pc23;
-            evaluation.Pc24 = dto.Pc24;
-            evaluation.Pc25 = dto.Pc25;
-            evaluation.Pc26 = dto.Pc26;
-            evaluation.Pc27 = dto.Pc27;
-            evaluation.Pc28 = dto.Pc28;
-            evaluation.Pc29 = dto.Pc29;
-            evaluation.Pc30 = dto.Pc30;
+            evaluation.CheckName = dto.CheckName;
+            evaluation.Description = dto.Description;
             evaluation.DateUpdated = DateTime.Now;
 
             _db.SaveChanges();
+        }
+
+        public void DeleteEvaluation(int evaluationId)
+        {
+            var entityToRemove = _db.OperatorEvaluations.Find(evaluationId);
+            _db.OperatorEvaluations.Remove(entityToRemove);
+            _db.SaveChanges();
+        }
+
+        public List<OperatorEvaluationPcs> GetOperatorQualificationPcsByEvalId (int evalId)
+        {
+            return _db.OperatorEvaluationPcs.Where(e => e.EvaluationId == evalId).ToList();
+        }
+
+        public OperatorEvaluationPcs AddPcsResult(OperatorEvaluationPcsDto dto)
+        {
+            var newPcsResult = new OperatorEvaluationPcs
+            {
+                PcsNo = dto.PcsNo,
+                Result = dto.Result,
+                DateAdded = DateTime.Now,
+                EvaluationId = dto.EvaluationId
+            };
+
+            _db.OperatorEvaluationPcs.Add(newPcsResult);
+            _db.SaveChanges();
+
+            if(dto.Result == "Good")
+            {
+                var updateEval = _db.OperatorEvaluations.Find(dto.EvaluationId);
+                var property = updateEval.GetType().GetProperty(dto.PcsNo);
+                property.SetValue(updateEval, true);
+                
+                if(dto.PcsNo == "Pc30")
+                {
+                    updateEval.Remarks = "Good";
+                }
+
+                updateEval.DateUpdated = DateTime.Now;
+                _db.SaveChanges();
+            }
+            
+
+
+            return newPcsResult;
         }
 
 
@@ -218,7 +287,10 @@ namespace Monitoring4M1Ev2.Services
             _db.SaveChanges();
         }
 
-
+        private OperatorDetail GetOperatorId(string emplId)
+        {
+            return _db.OperatorDetails.Where(e => e.OperatorEmployeeId == emplId).FirstOrDefault();
+        } 
 
 
     }

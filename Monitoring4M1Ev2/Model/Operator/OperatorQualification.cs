@@ -37,4 +37,5 @@ namespace Monitoring4M1Ev2.Model.Operator
         public string Process { get; set; }
         public int InCharge { get; set; }
     }
+
 }

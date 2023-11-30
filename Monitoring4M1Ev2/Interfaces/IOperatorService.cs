@@ -12,17 +12,26 @@ namespace Monitoring4M1Ev2.Interfaces
         OperatorDetail AddOperator(OperatorDetailDto dto);
         List<OperatorDetail> GetAllOperators();
         OperatorQualification AddOperatorQualification(OperatorQualificationDto dto);
-        void AddOperatorSafetyAnswer(string answer, int qualificationId);
-        void AddUpdateEvaluation(EvaluationDto dto, ItemEvaluationDto itemDto, string process, int evalId, int qualifyId);
+        OperatorSafetyAnswer AddOperatorSafetyAnswer(string answer, int qualificationId);
+        OperatorEvaluation AddEvaluation(EvaluationDto dto);
+        object GetCurrentQualification(string empId);
+        OperatorEvaluationPcs AddPcsResult(OperatorEvaluationPcsDto dto);
 
         // GETTING LIST OF DATA
         object GetOperator(string emplId);
+        List<OperatorEvaluationPcs> GetOperatorQualificationPcsByEvalId(int evalId);
 
         // DATA CHECKING
         bool CheckDataExists<T>(T data, string table) where T : IConvertible;
 
-        // Update Date
+        // Update
         void OperatorUpdateTime(int id);
+        void UpdateEvaluation(EvaluationDto dto, int evaluationId);
+        void UpdateOperatorQualificationById(int id, OperatorQualificationDto dto);
+        void UpdateOperatorSafetyAnswerById(string answer, int id);
+
+        // DELETE
+        void DeleteEvaluation(int evaluationId);
 
     }
 }

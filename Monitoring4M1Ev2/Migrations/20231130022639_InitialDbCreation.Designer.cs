@@ -10,7 +10,7 @@ using Monitoring4M1Ev2.Context;
 namespace Monitoring4M1Ev2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231115231944_InitialDbCreation")]
+    [Migration("20231130022639_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -423,65 +423,65 @@ namespace Monitoring4M1Ev2.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(250);
 
-                    b.Property<bool?>("Pc1");
+                    b.Property<bool>("Pc1");
 
-                    b.Property<bool?>("Pc10");
+                    b.Property<bool>("Pc10");
 
-                    b.Property<bool?>("Pc11");
+                    b.Property<bool>("Pc11");
 
-                    b.Property<bool?>("Pc12");
+                    b.Property<bool>("Pc12");
 
-                    b.Property<bool?>("Pc13");
+                    b.Property<bool>("Pc13");
 
-                    b.Property<bool?>("Pc14");
+                    b.Property<bool>("Pc14");
 
-                    b.Property<bool?>("Pc15");
+                    b.Property<bool>("Pc15");
 
-                    b.Property<bool?>("Pc16");
+                    b.Property<bool>("Pc16");
 
-                    b.Property<bool?>("Pc17");
+                    b.Property<bool>("Pc17");
 
-                    b.Property<bool?>("Pc18");
+                    b.Property<bool>("Pc18");
 
-                    b.Property<bool?>("Pc19");
+                    b.Property<bool>("Pc19");
 
-                    b.Property<bool?>("Pc2");
+                    b.Property<bool>("Pc2");
 
-                    b.Property<bool?>("Pc20");
+                    b.Property<bool>("Pc20");
 
-                    b.Property<bool?>("Pc21");
+                    b.Property<bool>("Pc21");
 
-                    b.Property<bool?>("Pc22");
+                    b.Property<bool>("Pc22");
 
-                    b.Property<bool?>("Pc23");
+                    b.Property<bool>("Pc23");
 
-                    b.Property<bool?>("Pc24");
+                    b.Property<bool>("Pc24");
 
-                    b.Property<bool?>("Pc25");
+                    b.Property<bool>("Pc25");
 
-                    b.Property<bool?>("Pc26");
+                    b.Property<bool>("Pc26");
 
-                    b.Property<bool?>("Pc27");
+                    b.Property<bool>("Pc27");
 
-                    b.Property<bool?>("Pc28");
+                    b.Property<bool>("Pc28");
 
-                    b.Property<bool?>("Pc29");
+                    b.Property<bool>("Pc29");
 
-                    b.Property<bool?>("Pc3");
+                    b.Property<bool>("Pc3");
 
-                    b.Property<bool?>("Pc30");
+                    b.Property<bool>("Pc30");
 
-                    b.Property<bool?>("Pc4");
+                    b.Property<bool>("Pc4");
 
-                    b.Property<bool?>("Pc5");
+                    b.Property<bool>("Pc5");
 
-                    b.Property<bool?>("Pc6");
+                    b.Property<bool>("Pc6");
 
-                    b.Property<bool?>("Pc7");
+                    b.Property<bool>("Pc7");
 
-                    b.Property<bool?>("Pc8");
+                    b.Property<bool>("Pc8");
 
-                    b.Property<bool?>("Pc9");
+                    b.Property<bool>("Pc9");
 
                     b.Property<int>("QualificationId");
 
@@ -492,6 +492,27 @@ namespace Monitoring4M1Ev2.Migrations
                     b.HasIndex("QualificationId");
 
                     b.ToTable("OperatorEvaluations");
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Operator.OperatorEvaluationPcs", b =>
+                {
+                    b.Property<int>("PcsId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<int>("EvaluationId");
+
+                    b.Property<string>("PcsNo");
+
+                    b.Property<string>("Result");
+
+                    b.HasKey("PcsId");
+
+                    b.HasIndex("EvaluationId");
+
+                    b.ToTable("OperatorEvaluationPcs");
                 });
 
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Operator.OperatorQualification", b =>
@@ -705,6 +726,14 @@ namespace Monitoring4M1Ev2.Migrations
                     b.HasOne("Monitoring4M1Ev2.Model.Operator.OperatorQualification")
                         .WithMany("OperatorEvaluations")
                         .HasForeignKey("QualificationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Operator.OperatorEvaluationPcs", b =>
+                {
+                    b.HasOne("Monitoring4M1Ev2.Model.Operator.OperatorEvaluation")
+                        .WithMany("OperatorQualificationPcs")
+                        .HasForeignKey("EvaluationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
