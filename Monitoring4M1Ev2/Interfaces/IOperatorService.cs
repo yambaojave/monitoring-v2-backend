@@ -29,6 +29,7 @@ namespace Monitoring4M1Ev2.Interfaces
         void UpdateEvaluation(EvaluationDto dto, int evaluationId);
         void UpdateOperatorQualificationById(int id, OperatorQualificationDto dto);
         void UpdateOperatorSafetyAnswerById(string answer, int id);
+        bool EvaluateAssessment(int qualificationId);
 
         // DELETE
         void DeleteEvaluation(int evaluationId);

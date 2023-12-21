@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monitoring4M1Ev2.Context;
 
 namespace Monitoring4M1Ev2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231206045440_InitialDbCreation")]
+    partial class InitialDbCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -382,79 +384,6 @@ namespace Monitoring4M1Ev2.Migrations
                     b.ToTable("Trainees");
                 });
 
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.OperationProcess", b =>
-                {
-                    b.Property<int>("MachineId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateAdded");
-
-                    b.Property<DateTime>("DateUpdated");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("OperationName");
-
-                    b.Property<int>("WIId");
-
-                    b.HasKey("MachineId");
-
-                    b.HasIndex("WIId");
-
-                    b.ToTable("OperationProcesses");
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.ProductionModel", b =>
-                {
-                    b.Property<int>("PModelId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateAdded");
-
-                    b.Property<DateTime>("DateUpdated");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("ModelDescription")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ModelName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.HasKey("PModelId");
-
-                    b.ToTable("ProductionModels");
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.WIMatrix", b =>
-                {
-                    b.Property<int>("WIId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ControlNumber");
-
-                    b.Property<DateTime>("DateAdded");
-
-                    b.Property<DateTime>("DateUpdated");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<int>("PModelId");
-
-                    b.Property<string>("ProcessNumber");
-
-                    b.HasKey("WIId");
-
-                    b.HasIndex("PModelId");
-
-                    b.ToTable("WIMatrices");
-                });
-
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Operator.OperatorDetail", b =>
                 {
                     b.Property<int>("OperatorDetailId")
@@ -794,22 +723,6 @@ namespace Monitoring4M1Ev2.Migrations
                     b.HasOne("Monitoring4M1Ev2.Model.Framework_4M_1E.Man")
                         .WithMany("Trainees")
                         .HasForeignKey("ManId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.OperationProcess", b =>
-                {
-                    b.HasOne("Monitoring4M1Ev2.Model.Matrix.WIMatrix", "WIMatrix")
-                        .WithMany("OperationProcesses")
-                        .HasForeignKey("WIId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.WIMatrix", b =>
-                {
-                    b.HasOne("Monitoring4M1Ev2.Model.Matrix.ProductionModel", "ProductionModel")
-                        .WithMany("WIMatrices")
-                        .HasForeignKey("PModelId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

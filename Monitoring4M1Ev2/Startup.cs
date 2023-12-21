@@ -48,6 +48,7 @@ namespace Monitoring4M1Ev2
             services.AddScoped<IBarcodeService, BarcodeService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IM4EService, M4EService>();
+            services.AddScoped<IMatrixService, MatrixService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }
@@ -66,6 +67,7 @@ namespace Monitoring4M1Ev2
             .AllowAnyHeader());
 
             app.UseMvc();
+            
         }
     }
 }

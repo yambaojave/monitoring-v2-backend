@@ -41,9 +41,10 @@ namespace Monitoring4M1Ev2.Services
                         oq.QualificationId,
                         oq.Model,
                         oq.Process,
+                        oq.CreatedBy,
                         oq.OverallAssessment,
                         oq.DateAdded,
-                        trainer = $"{oq.InChargeDetails.LastName}, {oq.InChargeDetails.FirstName}",
+                        CreatedByUser = $"{oq.InChargeDetails.LastName}, {oq.InChargeDetails.FirstName}",
                         operatorSafetyAnswers = (oq.OperatorSafetyAnswers != null) ? new
                         {
                             oq.OperatorSafetyAnswers.AnswerId,
@@ -75,6 +76,7 @@ namespace Monitoring4M1Ev2.Services
                     q.QualificationId,
                     q.Model,
                     q.Process,
+                    q.CreatedBy,
                     q.OverallAssessment,
                     q.DateAdded,
                     trainer = $"{q.InChargeDetails.LastName}, {q.InChargeDetails.FirstName}",
@@ -123,7 +125,8 @@ namespace Monitoring4M1Ev2.Services
                 OperatorDetailId = dto.OperatorDetailId,
                 Model = dto.Model,
                 Process = dto.Process,
-                InCharge = dto.InCharge
+                Trainer = dto.Trainer,
+                CreatedBy = dto.CreatedBy
             };
 
             _db.OperatorQualifications.Add(newQualification);
@@ -138,6 +141,7 @@ namespace Monitoring4M1Ev2.Services
 
             qualification.Model = dto.Model;
             qualification.Process = dto.Process;
+            qualification.CreatedBy = dto.CreatedBy;
 
             _db.SaveChanges();
         }
@@ -242,19 +246,26 @@ namespace Monitoring4M1Ev2.Services
         }
 
 
-        public void EvaluateAssessment(int qualificationId)
+        public bool EvaluateAssessment(int qualificationId)
         {
             /*
              *  TODO : Evaluating of Operator training performance 
              */
             var qualification = _db.OperatorQualifications.Find(qualificationId);
-            var evaluation = _db.OperatorEvaluations.Find(qualification.QualificationId);
+            var evaluations = _db.OperatorEvaluations.Where(e => e.QualificationId == qualification.QualificationId).ToList();
 
-            Type type = evaluation.GetType();
+            foreach (var eval in evaluations)
+            {
+                if(eval.Remarks != "Good")
+                {
+                    return false;
+                }
+            }
 
-            PropertyInfo[] boolProperties = type.GetProperties()
-                .Where(p => p.PropertyType == typeof(bool?))
-                .ToArray();
+            qualification.OverallAssessment = true;
+            qualification.OverallAssessmentUpdate = DateTime.Now;
+            _db.SaveChanges();
+            return true;
         }
 
         /*

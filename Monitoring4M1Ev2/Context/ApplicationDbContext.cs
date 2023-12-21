@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Monitoring4M1Ev2.Model.Framework_4M_1E;
+using Monitoring4M1Ev2.Model.Matrix;
 using Monitoring4M1Ev2.Model.Operator;
 using Monitoring4M1Ev2.Model.User;
 using System;
@@ -47,13 +48,12 @@ namespace Monitoring4M1Ev2.Context
         public DbSet<MethodRemark> MethodRemarks { get; set; }
         public DbSet<MethodSystemRemark> MethodSystemRemarks { get; set; }
          
+        /*
+         *  Matrix 
+         */
+        public DbSet<OperationProcess> OperationProcesses { get; set; }
+        public DbSet<ProductionModel> ProductionModels { get; set; }
+        public DbSet<WIMatrix> WIMatrices { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<UserLine>()
-        //        .HasOne(d => d.UserDetail)
-        //        .WithMany(a => a.UserLines)
-        //        .HasForeignKey(d => d.UserDetailId);
-        //}
     }
 }

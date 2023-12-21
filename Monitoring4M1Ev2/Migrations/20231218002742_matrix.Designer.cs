@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monitoring4M1Ev2.Context;
 
 namespace Monitoring4M1Ev2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231218002742_matrix")]
+    partial class matrix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,7 +394,7 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<DateTime>("DateUpdated");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsAcive");
 
                     b.Property<string>("OperationName");
 
@@ -417,13 +419,9 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<string>("ModelDescription")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("ModelDescription");
 
-                    b.Property<string>("ModelName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("ModelName");
 
                     b.HasKey("PModelId");
 

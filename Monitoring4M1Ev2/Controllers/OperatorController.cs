@@ -129,6 +129,18 @@ namespace Monitoring4M1Ev2.Controllers
             return Ok(newPcsResult);
         }
 
+        [HttpPut("finalize_assesment/{id}")]
+        public ActionResult PutQualificationOverallAssessment(int id)
+        {
+            bool result = _operatorService.EvaluateAssessment(id);
+
+            if (result)
+            {
+                return Ok(new { result = "Finalize done." } );
+            }
+
+            return Conflict(new { error = "Please complete the evaluation." });
+        }
 
 
 

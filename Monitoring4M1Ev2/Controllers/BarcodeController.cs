@@ -56,6 +56,11 @@ namespace Monitoring4M1Ev2.Controllers
             return Ok(_bcService.GetLatestWorkGroupByLine(line));
         }
 
+        [HttpGet("item/{name}")]
+        public ActionResult GetItemDescription(string name)
+        {
+            return Ok(_bcService.GetItemDescription(name));
+        }
 
     }
 }

@@ -13,5 +13,6 @@ namespace Monitoring4M1Ev2.Interfaces
         string[] GetWorkGroupOperators(int id);
         string[] GetWorkGroupMachineTemplate(int id);
         int GetLatestWorkGroupByLine(string line);
+        B2ITEMMASTER GetItemDescription(string item);
     }
 }

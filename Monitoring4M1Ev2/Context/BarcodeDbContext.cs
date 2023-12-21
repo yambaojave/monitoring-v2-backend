@@ -14,5 +14,6 @@ namespace Monitoring4M1Ev2.Context
         public DbSet<B2BOM> B2BOM { get; set; }
         public DbSet<B2WORKGROUP> B2WORKGROUP { get; set; }
         public DbSet<B2WORKGROUPDETAIL> B2WORKGROUPDETAIL { get; set; }
+        public DbSet<B2ITEMMASTER> B2ITEMMASTER { get; set; }
     }
 }

@@ -86,5 +86,10 @@ namespace Monitoring4M1Ev2.Services
             // Material BOM
             return _db.B2BOM.AsNoTracking().Where(e => e.BOMCode == bom && e.EndEffective == null).ToList();
         }
+
+        public B2ITEMMASTER GetItemDescription(string item)
+        {
+            return _db.B2ITEMMASTER.Where(e => e.ITEMNO == item).FirstOrDefault();
+        }
     }
 }

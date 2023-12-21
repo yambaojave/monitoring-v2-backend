@@ -20,10 +20,13 @@ namespace Monitoring4M1Ev2.Model.Operator
         public string Model { get; set; }
         [MaxLength(50)]
         public string Process { get; set; }
+        [MaxLength(50)]
+        public string Trainer { get; set; }
         public bool OverallAssessment { get; set; } = false;
-        public int InCharge { get; set; } 
-        [ForeignKey("InCharge")]
-        public UserDetail InChargeDetails { get; set; } // for test
+        public DateTime OverallAssessmentUpdate { get; set; }
+        public int CreatedBy { get; set; } 
+        [ForeignKey("CreatedBy")]
+        public UserDetail InChargeDetails { get; set; }
         public DateTime DateAdded { get; set; } = DateTime.Now;
 
         public OperatorSafetyAnswer OperatorSafetyAnswers { get; set; }
@@ -35,7 +38,8 @@ namespace Monitoring4M1Ev2.Model.Operator
         public int OperatorDetailId { get; set; }
         public string Model { get; set; }
         public string Process { get; set; }
-        public int InCharge { get; set; }
+        public string Trainer { get; set; }
+        public int CreatedBy { get; set; }
     }
 
 }

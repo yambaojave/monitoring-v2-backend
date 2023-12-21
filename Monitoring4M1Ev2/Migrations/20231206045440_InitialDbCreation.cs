@@ -223,16 +223,18 @@ namespace Monitoring4M1Ev2.Migrations
                     OperatorDetailId = table.Column<int>(nullable: false),
                     Model = table.Column<string>(maxLength: 50, nullable: true),
                     Process = table.Column<string>(maxLength: 50, nullable: true),
+                    Trainer = table.Column<string>(maxLength: 50, nullable: true),
                     OverallAssessment = table.Column<bool>(nullable: false),
-                    InCharge = table.Column<int>(nullable: false),
+                    OverallAssessmentUpdate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: false),
                     DateAdded = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OperatorQualifications", x => x.QualificationId);
                     table.ForeignKey(
-                        name: "FK_OperatorQualifications_UserDetails_InCharge",
-                        column: x => x.InCharge,
+                        name: "FK_OperatorQualifications_UserDetails_CreatedBy",
+                        column: x => x.CreatedBy,
                         principalTable: "UserDetails",
                         principalColumn: "UserDetailId",
                         onDelete: ReferentialAction.Cascade);
@@ -607,9 +609,9 @@ namespace Monitoring4M1Ev2.Migrations
                 column: "QualificationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OperatorQualifications_InCharge",
+                name: "IX_OperatorQualifications_CreatedBy",
                 table: "OperatorQualifications",
-                column: "InCharge");
+                column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OperatorQualifications_OperatorDetailId",

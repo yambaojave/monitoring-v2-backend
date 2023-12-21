@@ -10,8 +10,8 @@ using Monitoring4M1Ev2.Context;
 namespace Monitoring4M1Ev2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231130022639_InitialDbCreation")]
-    partial class InitialDbCreation
+    [Migration("20231218062510_active")]
+    partial class active
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -384,6 +384,79 @@ namespace Monitoring4M1Ev2.Migrations
                     b.ToTable("Trainees");
                 });
 
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.OperationProcess", b =>
+                {
+                    b.Property<int>("MachineId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<DateTime>("DateUpdated");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<int>("WIId");
+
+                    b.HasKey("MachineId");
+
+                    b.HasIndex("WIId");
+
+                    b.ToTable("OperationProcesses");
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.ProductionModel", b =>
+                {
+                    b.Property<int>("PModelId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<DateTime>("DateUpdated");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("ModelDescription")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ModelName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("PModelId");
+
+                    b.ToTable("ProductionModels");
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.WIMatrix", b =>
+                {
+                    b.Property<int>("WIId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ControlNumber");
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<DateTime>("DateUpdated");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("PModelId");
+
+                    b.Property<string>("ProcessNumber");
+
+                    b.HasKey("WIId");
+
+                    b.HasIndex("PModelId");
+
+                    b.ToTable("WIMatrices");
+                });
+
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Operator.OperatorDetail", b =>
                 {
                     b.Property<int>("OperatorDetailId")
@@ -521,9 +594,9 @@ namespace Monitoring4M1Ev2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateAdded");
+                    b.Property<int>("CreatedBy");
 
-                    b.Property<int>("InCharge");
+                    b.Property<DateTime>("DateAdded");
 
                     b.Property<string>("Model")
                         .HasMaxLength(50);
@@ -532,12 +605,17 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<bool>("OverallAssessment");
 
+                    b.Property<DateTime>("OverallAssessmentUpdate");
+
                     b.Property<string>("Process")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Trainer")
                         .HasMaxLength(50);
 
                     b.HasKey("QualificationId");
 
-                    b.HasIndex("InCharge");
+                    b.HasIndex("CreatedBy");
 
                     b.HasIndex("OperatorDetailId");
 
@@ -721,6 +799,22 @@ namespace Monitoring4M1Ev2.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.OperationProcess", b =>
+                {
+                    b.HasOne("Monitoring4M1Ev2.Model.Matrix.WIMatrix", "WIMatrix")
+                        .WithMany("OperationProcesses")
+                        .HasForeignKey("WIId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.WIMatrix", b =>
+                {
+                    b.HasOne("Monitoring4M1Ev2.Model.Matrix.ProductionModel", "ProductionModel")
+                        .WithMany("WIMatrices")
+                        .HasForeignKey("PModelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Operator.OperatorEvaluation", b =>
                 {
                     b.HasOne("Monitoring4M1Ev2.Model.Operator.OperatorQualification")
@@ -741,7 +835,7 @@ namespace Monitoring4M1Ev2.Migrations
                 {
                     b.HasOne("Monitoring4M1Ev2.Model.User.UserDetail", "InChargeDetails")
                         .WithMany()
-                        .HasForeignKey("InCharge")
+                        .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Monitoring4M1Ev2.Model.Operator.OperatorDetail", "OperatorDetail")
