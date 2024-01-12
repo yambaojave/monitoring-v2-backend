@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monitoring4M1Ev2.Context;
 
 namespace Monitoring4M1Ev2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240108024615_modelheadcount")]
+    partial class modelheadcount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -598,10 +600,6 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<DateTime>("DateAdded");
 
-                    b.Property<bool>("ForReassessment");
-
-                    b.Property<DateTime>("ForReassessmentUpdate");
-
                     b.Property<string>("Model")
                         .HasMaxLength(50);
 
@@ -645,54 +643,6 @@ namespace Monitoring4M1Ev2.Migrations
                         .IsUnique();
 
                     b.ToTable("OperatorSafetyAnswers");
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Plan.PlanDetail", b =>
-                {
-                    b.Property<int>("PlanDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Condition");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Operator");
-
-                    b.Property<int>("PlanHeaderId");
-
-                    b.HasKey("PlanDetailId");
-
-                    b.HasIndex("PlanHeaderId");
-
-                    b.ToTable("PlanDetails");
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Plan.PlanHeader", b =>
-                {
-                    b.Property<int>("PlanHeaderId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("IsUsed");
-
-                    b.Property<string>("Line");
-
-                    b.Property<string>("Model");
-
-                    b.Property<DateTime>("PlanDate");
-
-                    b.Property<string>("Shift");
-
-                    b.Property<DateTime>("UsedDate");
-
-                    b.HasKey("PlanHeaderId");
-
-                    b.ToTable("PlanHeaders");
                 });
 
             modelBuilder.Entity("Monitoring4M1Ev2.Model.User.UserDetail", b =>
@@ -905,14 +855,6 @@ namespace Monitoring4M1Ev2.Migrations
                     b.HasOne("Monitoring4M1Ev2.Model.Operator.OperatorQualification")
                         .WithOne("OperatorSafetyAnswers")
                         .HasForeignKey("Monitoring4M1Ev2.Model.Operator.OperatorSafetyAnswer", "QualificationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Monitoring4M1Ev2.Model.Plan.PlanDetail", b =>
-                {
-                    b.HasOne("Monitoring4M1Ev2.Model.Plan.PlanHeader", "PlanHeader")
-                        .WithMany("PlanDetails")
-                        .HasForeignKey("PlanHeaderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

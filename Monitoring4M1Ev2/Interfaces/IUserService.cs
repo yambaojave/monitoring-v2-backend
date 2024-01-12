@@ -10,7 +10,7 @@ namespace Monitoring4M1Ev2.Interfaces
     {
         List<UserDetail> GetAllUserDetails();
         UserDetail GetUserDetailById(int userDetailId);
-        void AddUser(UserDetailDto dto);
+        void AddUser(UserDetailDto dto, int currentUser);
         void AddNewLineForUser(int userDetailId, string[] Lines);
         void UpdatePassword(int userDetailId, string updatedPassword);
     }

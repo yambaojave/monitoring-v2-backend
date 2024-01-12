@@ -35,6 +35,7 @@ namespace Monitoring4M1Ev2.Services
             {
                 ModelName = dto.ModelName,
                 ModelDescription = dto.ModelDescription,
+                ModelHeadCount = dto.ModelHeadCount
             };
 
             _db.ProductionModels.Add(newModel);
@@ -42,6 +43,8 @@ namespace Monitoring4M1Ev2.Services
 
             return newModel;
         }
+
+        
 
         public void UpdateProductionModel(ProductionModelDto dto, int id, string updateType)
         {
@@ -178,5 +181,42 @@ namespace Monitoring4M1Ev2.Services
         }
 
 
+        public Dictionary<string, string[]> GetModelProcessOperation(string model)
+        {
+            int modelId = _db.ProductionModels.Where(e => e.ModelName == model).Select(e => e.PModelId).FirstOrDefault();
+            var items = _db.WIMatrices.Where(e => e.PModelId == modelId).OrderBy(e => e.ProcessNumber).ToList();
+            var operations = _db.OperationProcesses.ToList();
+
+            var myDictionary = new Dictionary<string, string[]>();
+
+            foreach (var item in items)
+            {
+                string[] opArray = operations.Where(e => e.WIId == item.WIId && e.IsActive == true).Select(e => e.OperationName).ToArray();
+                myDictionary.Add(item.ProcessNumber, opArray);//new string[] { opArray });
+            }
+
+            return myDictionary;
+        }
+
+
+        // Samples
+        public List<T> ModelProcessOperation<T>(string model) where T : class
+        {
+            int modelId = _db.ProductionModels.Where(e => e.ModelName == model).Select(e => e.PModelId).FirstOrDefault();
+            var items = _db.WIMatrices.Where(e => e.PModelId == modelId).ToList();
+
+            //List<T> myList = new List<T> { (T)(object)items };
+            //List<T> myList = new List<T> { items as T };
+
+            List<T> myList = items.Cast<T>().ToList();
+
+            return myList;
+
+        }
+
+        public bool ModelExisting(string model)
+        {
+            return _db.ProductionModels.Any(e => e.ModelName == model && e.IsActive == true);
+        }
     }
 }

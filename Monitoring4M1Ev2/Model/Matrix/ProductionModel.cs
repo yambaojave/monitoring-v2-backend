@@ -18,6 +18,7 @@ namespace Monitoring4M1Ev2.Model.Matrix
         [MaxLength(50)]
         [Required]
         public string ModelDescription { get; set; }
+        public int? ModelHeadCount { get; set; }
         public DateTime DateAdded { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
         public DateTime DateUpdated { get; set; }
@@ -28,5 +29,6 @@ namespace Monitoring4M1Ev2.Model.Matrix
     {
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
+        public int ModelHeadCount { get; set; }
     }
 }

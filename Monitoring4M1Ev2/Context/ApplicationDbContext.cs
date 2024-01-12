@@ -2,6 +2,7 @@
 using Monitoring4M1Ev2.Model.Framework_4M_1E;
 using Monitoring4M1Ev2.Model.Matrix;
 using Monitoring4M1Ev2.Model.Operator;
+using Monitoring4M1Ev2.Model.Plan;
 using Monitoring4M1Ev2.Model.User;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,12 @@ namespace Monitoring4M1Ev2.Context
         public DbSet<MethodRemark> MethodRemarks { get; set; }
         public DbSet<MethodSystemRemark> MethodSystemRemarks { get; set; }
          
+        /*
+         *  Plan
+         */
+        public DbSet<PlanHeader> PlanHeaders { get; set; }
+        public DbSet<PlanDetail> PlanDetails { get; set; }
+
         /*
          *  Matrix 
          */

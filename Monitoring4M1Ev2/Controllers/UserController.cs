@@ -21,9 +21,26 @@ namespace Monitoring4M1Ev2.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<UserDetail>> GetAllUserDetails()
+        public ActionResult<List<object>> GetAllUserDetails()
         {
-            return Ok(_userService.GetAllUserDetails());
+            var newFormat = _userService.GetAllUserDetails().Select(u => new
+            {
+                u.UserDetailId,
+                u.OperatorEmployeeId,
+                u.Username,
+                u.PasswordHash,
+                u.FirstName,
+                u.LastName,
+                u.Role,
+                u.IsActive,
+                u.CreatedBy,
+                u.CreatedDate,
+                u.UpdatedDate,
+                UserLines = u.UserLines.Select(ul => ul.Line).ToArray()
+            });
+
+            return Ok(newFormat);
+
         }
 
         [HttpGet("{id}")]
@@ -42,7 +59,7 @@ namespace Monitoring4M1Ev2.Controllers
         [HttpPost]
         public ActionResult AddUser([FromBody] UserDetailDto dto)
         {
-            _userService.AddUser(dto);
+            _userService.AddUser(dto, 1);
             return Ok();
         }
 

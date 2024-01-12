@@ -28,6 +28,16 @@ namespace Monitoring4M1Ev2.Controllers
             return Ok(_matrixService.GetProductionModels());
         }
 
+        [HttpGet("process/{model}")]
+        public ActionResult<Dictionary<string, string[]>> GetModelProcessOperation(string model)
+        {
+            if (!_matrixService.ModelExisting(model))
+            {
+                return NotFound(new { error = $"{model} does not yet exists, please add to operation matrix." });
+            }
+            return Ok(_matrixService.GetModelProcessOperation(model));
+        }
+
         [HttpPost("model")]
         public ActionResult PostProductionModel(ProductionModelDto dto)
         {
@@ -147,12 +157,12 @@ namespace Monitoring4M1Ev2.Controllers
         {
             try
             {
-                ActionResult conflictResult = CheckForConflicts(dto, "PROCESS");
+                //ActionResult conflictResult = CheckForConflicts(dto, "PROCESS");
 
-                if (conflictResult != null)
-                {
-                    return conflictResult;
-                }
+                //if (conflictResult != null)
+                //{
+                //    return conflictResult;
+                //}
                 return Created("process", _matrixService.PostOperationProcess(dto));
             }
             catch (Exception e)
@@ -166,12 +176,12 @@ namespace Monitoring4M1Ev2.Controllers
         {
             try
             {
-                ActionResult conflictResult = CheckForConflicts(dto, "PROCESS");
+                //ActionResult conflictResult = CheckForConflicts(dto, "PROCESS");
 
-                if(conflictResult != null)
-                {
-                    return conflictResult;
-                }
+                //if(conflictResult != null)
+                //{
+                //    return conflictResult;
+                //}
 
                 _matrixService.UpdateOperationProcess(dto, id, "");
                 return NoContent();

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Monitoring4M1Ev2.Context;
 using Monitoring4M1Ev2.Interfaces;
+using Monitoring4M1Ev2.Model.User;
 using Monitoring4M1Ev2.Services;
 
 namespace Monitoring4M1Ev2
@@ -43,12 +44,14 @@ namespace Monitoring4M1Ev2
             services.AddDbContext<JsphDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("JSPH")));
 
+           
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOperatorService, OperatorService>();
             services.AddScoped<IBarcodeService, BarcodeService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IM4EService, M4EService>();
             services.AddScoped<IMatrixService, MatrixService>();
+            services.AddScoped<IPlanService, PlanService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }

@@ -24,5 +24,13 @@ namespace Monitoring4M1Ev2.Model.Employee
                 return empd_ID.Replace(" ", "");
             }
         }
+
+        public string createUsername
+        {
+            get
+            {
+                return $"{lname.ToLower()}{fname.Substring(0,1).ToLower()}";
+            }
+        }
     }
 }

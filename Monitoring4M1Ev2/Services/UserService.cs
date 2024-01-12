@@ -18,7 +18,7 @@ namespace Monitoring4M1Ev2.Services
             _db = db;
         }
 
-        public List<UserDetail> GetAllUserDetails()
+        public List<UserDetail> GetAllUserDetails() 
         {
             return _db.UserDetails.Include(e => e.UserLines).ToList();
         }
@@ -28,7 +28,7 @@ namespace Monitoring4M1Ev2.Services
             return _db.UserDetails.Include(e => e.UserLines).FirstOrDefault(e => e.UserDetailId == userDetailId);
         }
 
-        public void AddUser(UserDetailDto dto)
+        public void AddUser(UserDetailDto dto, int currentUser)
         {
             var newUser = new UserDetail
             {
@@ -37,6 +37,8 @@ namespace Monitoring4M1Ev2.Services
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Role = dto.Role,
+                OperatorEmployeeId = dto.OperatorEmployeeId,
+                CreatedBy = currentUser
             };
 
             _db.UserDetails.Add(newUser);

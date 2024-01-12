@@ -24,6 +24,8 @@ namespace Monitoring4M1Ev2.Model.Operator
         public string Trainer { get; set; }
         public bool OverallAssessment { get; set; } = false;
         public DateTime OverallAssessmentUpdate { get; set; }
+        public bool ForReassessment { get; set; } = false;
+        public DateTime ForReassessmentUpdate { get; set; }
         public int CreatedBy { get; set; } 
         [ForeignKey("CreatedBy")]
         public UserDetail InChargeDetails { get; set; }

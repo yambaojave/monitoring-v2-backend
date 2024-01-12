@@ -41,8 +41,10 @@ namespace Monitoring4M1Ev2.Services
                         oq.QualificationId,
                         oq.Model,
                         oq.Process,
+                        oq.Trainer,
                         oq.CreatedBy,
                         oq.OverallAssessment,
+                        oq.ForReassessment,
                         oq.DateAdded,
                         CreatedByUser = $"{oq.InChargeDetails.LastName}, {oq.InChargeDetails.FirstName}",
                         operatorSafetyAnswers = (oq.OperatorSafetyAnswers != null) ? new
@@ -142,6 +144,7 @@ namespace Monitoring4M1Ev2.Services
             qualification.Model = dto.Model;
             qualification.Process = dto.Process;
             qualification.CreatedBy = dto.CreatedBy;
+            qualification.Trainer = dto.Trainer;
 
             _db.SaveChanges();
         }
@@ -251,10 +254,16 @@ namespace Monitoring4M1Ev2.Services
             /*
              *  TODO : Evaluating of Operator training performance 
              */
-            var qualification = _db.OperatorQualifications.Find(qualificationId);
-            var evaluations = _db.OperatorEvaluations.Where(e => e.QualificationId == qualification.QualificationId).ToList();
+            var qualification = _db.OperatorQualifications.Include(e => e.OperatorEvaluations).FirstOrDefault(e => e.QualificationId == qualificationId);
+            if(qualification.OperatorEvaluations.Count == 0)
+            {
+                return false;
+            }
 
-            foreach (var eval in evaluations)
+
+            //var evaluations = _db.OperatorEvaluations.Where(e => e.QualificationId == qualification.QualificationId).ToList();
+
+            foreach (var eval in qualification.OperatorEvaluations)
             {
                 if(eval.Remarks != "Good")
                 {

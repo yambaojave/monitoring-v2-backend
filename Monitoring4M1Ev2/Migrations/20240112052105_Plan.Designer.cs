@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monitoring4M1Ev2.Context;
 
 namespace Monitoring4M1Ev2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240112052105_Plan")]
+    partial class Plan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -678,8 +680,6 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<bool>("IsUsed");
-
                     b.Property<string>("Line");
 
                     b.Property<string>("Model");
@@ -687,8 +687,6 @@ namespace Monitoring4M1Ev2.Migrations
                     b.Property<DateTime>("PlanDate");
 
                     b.Property<string>("Shift");
-
-                    b.Property<DateTime>("UsedDate");
 
                     b.HasKey("PlanHeaderId");
 

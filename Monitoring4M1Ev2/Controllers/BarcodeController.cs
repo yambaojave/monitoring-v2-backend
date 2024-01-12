@@ -59,7 +59,12 @@ namespace Monitoring4M1Ev2.Controllers
         [HttpGet("item/{name}")]
         public ActionResult GetItemDescription(string name)
         {
-            return Ok(_bcService.GetItemDescription(name));
+            var details = _bcService.GetItemDescription(name);
+
+            if (details == null)
+                return NotFound(new { error = "No Item Found." });
+
+            return Ok(details);
         }
 
     }

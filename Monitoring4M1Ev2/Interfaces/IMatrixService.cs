@@ -13,6 +13,12 @@ namespace Monitoring4M1Ev2.Interfaces
          */
         List<ProductionModel> GetProductionModels();
 
+
+
+        // Sample
+        List<T> ModelProcessOperation<T>(string model) where T : class;
+        Dictionary<string, string[]> GetModelProcessOperation(string model);
+
         /*
          *  CREATION 
          */
@@ -31,6 +37,7 @@ namespace Monitoring4M1Ev2.Interfaces
          *  CHECKING
          */
         bool DuplicateInputChecking(object obj, string table);
+        bool ModelExisting(string model);
 
     }
 }
