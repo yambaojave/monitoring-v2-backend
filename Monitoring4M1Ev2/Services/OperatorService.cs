@@ -310,8 +310,24 @@ namespace Monitoring4M1Ev2.Services
         private OperatorDetail GetOperatorId(string emplId)
         {
             return _db.OperatorDetails.Where(e => e.OperatorEmployeeId == emplId).FirstOrDefault();
-        } 
+        }
 
+        public IEnumerable<object> GetOperatorByModel(string model)
+        {
+            IEnumerable<object> opLists = _db.OperatorQualifications
+                .Include(e => e.OperatorDetail)
+                .Where(e => e.Model == model && e.OverallAssessment == true)
+                .AsEnumerable()
+                .Select(e => new
+                {
+                    e.OperatorDetail.OperatorEmployeeId,
+                    e.Model,
+                    Process = e.Process.Split(", "),
+                    e.ForReassessment
+                })
+                .ToList();            
 
+            return opLists;
+        }
     }
 }

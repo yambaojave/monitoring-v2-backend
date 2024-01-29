@@ -36,4 +36,10 @@ namespace Monitoring4M1Ev2.Model.User
         public int CreatedBy { get; set; }
         public string[] Lines { get; set; }
     }
+
+    public class LoginUser
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
 }

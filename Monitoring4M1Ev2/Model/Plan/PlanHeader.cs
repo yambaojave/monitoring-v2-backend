@@ -13,7 +13,7 @@ namespace Monitoring4M1Ev2.Model.Plan
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PlanHeaderId { get; set; }
         public string Model { get; set; }
-        public string Shift { get; set; }
+        public int Shift { get; set; }
         public string Line { get; set; }
         public bool IsUsed { get; set; }
         public DateTime UsedDate { get; set; }
@@ -27,7 +27,7 @@ namespace Monitoring4M1Ev2.Model.Plan
     public class PlanHeaderDto
     {
         public string Model { get; set; }
-        public string Shift { get; set; }
+        public int Shift { get; set; }
         public string Line { get; set; }
         public DateTime PlanDate { get; set; }
         public int CreatedBy { get; set; }

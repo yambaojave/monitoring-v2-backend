@@ -14,10 +14,12 @@ namespace Monitoring4M1Ev2.Controllers
     public class PlanController : ControllerBase
     {
         private readonly IPlanService _planService;
+        private readonly IMatrixService _matrixService;
 
-        public PlanController(IPlanService planService)
+        public PlanController(IPlanService planService, IMatrixService matrixService)
         {
             _planService = planService;
+            _matrixService = matrixService;
         }
 
         [HttpGet]
@@ -33,11 +35,29 @@ namespace Monitoring4M1Ev2.Controllers
             }
         }
 
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetAllDetailByIdAsync(int id)
+        {
+            try
+            {
+                return Ok(await _planService.GetAllDetailByIdAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
+
         [HttpPost("header")]
         public async Task<IActionResult> CreateHeaderAsync([FromBody] PlanHeaderDto dto)
         {
             try
             {
+                if (!_matrixService.ModelExisting(dto.Model))
+                {
+                    return NotFound(new { error = $"Model {dto.Model} does not exists. Kindly check matrix or whitespaces." });
+                }
+
                 return Created("header", await _planService.CreateHeaderAsync(dto));
             }
             catch (Exception ex)
@@ -82,6 +102,70 @@ namespace Monitoring4M1Ev2.Controllers
                 return NoContent();
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
+
+        [HttpPost("clone/{id}")]
+        public async Task<IActionResult> ClonePlanAsync(int id)
+        {
+            try
+            {
+                var header = await _planService.GetHeaderByIdAsync(id);
+                var dto = new PlanHeaderDto
+                {
+                    Model = header.Model,
+                    Shift = header.Shift,
+                    Line = header.Line,
+                    PlanDate = DateTime.MinValue,
+                    CreatedBy = 1
+                };
+
+                var cloneHeader = await _planService.CreateHeaderAsync(dto);
+
+                var details = await _planService.GetAllDetailByIdAsync(id);
+
+                var cloneDetails = await _planService.GetCloneNewDetails(details, header.Model);
+
+                foreach(var clone in cloneDetails)
+                {
+                    var dtoDetail = new PlanDetailDto
+                    {
+                        Operator = clone.Operator,
+                        Condition = clone.Condition,
+                        Process = clone.Process,
+                        ControlNumber = clone.ControlNumber,
+                        Machines = clone.Machines,
+                        PlanHeaderId = cloneHeader.PlanHeaderId
+                    };
+
+                    await _planService.CreateDetailAsync(dtoDetail);
+                }
+
+
+                return Created("clone", cloneHeader);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutHeaderById ([FromBody] PlanHeader planHeader)
+        {
+            try
+            {
+                if (!_matrixService.ModelExisting(planHeader.Model))
+                {
+                    return NotFound(new { error = $"Model {planHeader.Model} does not exists. Kindly check matrix or whitespaces." });
+                }
+
+                await _planService.UpdateHeaderById(planHeader);
+                return NoContent();
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.InnerException.Message);
             }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,12 @@ namespace Monitoring4M1Ev2.Controllers
     public class OperatorController : ControllerBase
     {
         private readonly IOperatorService _operatorService;
+        private readonly IMatrixService _matrixService;
 
-        public OperatorController(IOperatorService operatorService)
+        public OperatorController(IOperatorService operatorService, IMatrixService matrixService)
         {
             _operatorService = operatorService;
+            _matrixService = matrixService;
         }
 
         [HttpGet("all")]
@@ -143,6 +147,84 @@ namespace Monitoring4M1Ev2.Controllers
         }
 
 
+        [HttpGet("model/{model}")]
+        public ActionResult GetOperatorByModel(string model)
+        {
+            try
+            {
+                IEnumerable<object> ByModels = _operatorService.GetOperatorByModel(model);
+                var myMatrix = _matrixService.GetProductionModelByName(model);
+
+
+                var myDictionary = new Dictionary<string, object[]>();
+
+                foreach (var m in ByModels)
+                {
+                    PropertyInfo currentOperator = m.GetType().GetProperty("OperatorEmployeeId");
+                    PropertyInfo opProcess = m.GetType().GetProperty("Process");
+                    PropertyInfo reassessment = m.GetType().GetProperty("ForReassessment");
+                    object operatorId = currentOperator.GetValue(m);
+                    object processArray = opProcess.GetValue(m);
+                    object reassessmentValue = reassessment.GetValue(m);
+
+                    var objectList = new List<ExpandoObject>();
+
+                    foreach(var item in (Array)processArray)
+                    {
+                        var machines = myMatrix.WIMatrices.Where(e => e.ProcessNumber == item.ToString()).FirstOrDefault();
+                        var operations = machines.OperationProcesses.Select(e => e.OperationName).ToArray();
+
+                        dynamic newObject = new ExpandoObject();
+
+                        newObject.machines = operations;
+                        newObject.process = item;
+                        newObject.controlNumber = machines.ControlNumber;
+                        newObject.reAssessment = reassessmentValue;
+
+                        objectList.Add(newObject);
+                    }
+
+                    object[] objectsArray = objectList.ToArray();
+
+                    if (myDictionary.ContainsKey(operatorId.ToString()))
+                    {
+                        //object[] existingArray = myDictionary["O-0003242"];
+                        //object[] newArray = new object[existingArray.Length + 1];
+                        //Array.Copy(existingArray, newArray, existingArray.Length);
+                        //newArray[existingArray.Length] = objectsArray;
+
+
+                        //myDictionary["O-0003242"] = newArray;
+
+                        object[] existingArray = myDictionary[operatorId.ToString()];
+                        var existingList = existingArray.ToList();
+
+                        foreach(var item in objectList)
+                        {
+                            existingList.Insert(1, item);
+                        }
+
+                        object[] newArray = existingList.ToArray();
+                        myDictionary[operatorId.ToString()] = newArray;
+                    }
+                    else
+                    {
+                        myDictionary.Add(operatorId.ToString(), objectsArray);
+                    }
+
+                }
+
+
+
+
+                return Ok(myDictionary);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+
+        }
 
     }
 }

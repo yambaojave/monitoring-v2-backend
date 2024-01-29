@@ -25,5 +25,16 @@ namespace Monitoring4M1Ev2.Model
 
             return false;
         }
+
+        public static bool shiftDateChecking(DateTime date, int shift)
+        {
+            int[] shiftDate = { 5, 6 };
+            if (shiftDate.Contains(shift))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

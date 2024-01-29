@@ -12,7 +12,7 @@ namespace Monitoring4M1Ev2.Interfaces
          *  GET
          */
         List<ProductionModel> GetProductionModels();
-
+        ProductionModel GetProductionModelByName(string model);
 
 
         // Sample

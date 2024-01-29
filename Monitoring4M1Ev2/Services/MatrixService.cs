@@ -218,5 +218,10 @@ namespace Monitoring4M1Ev2.Services
         {
             return _db.ProductionModels.Any(e => e.ModelName == model && e.IsActive == true);
         }
+
+        public ProductionModel GetProductionModelByName(string model)
+        {
+            return _db.ProductionModels.Include(e => e.WIMatrices).ThenInclude(e => e.OperationProcesses).FirstOrDefault(e => e.ModelName == model);
+        }
     }
 }

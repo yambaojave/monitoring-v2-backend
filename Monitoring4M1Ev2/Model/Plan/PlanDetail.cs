@@ -13,9 +13,11 @@ namespace Monitoring4M1Ev2.Model.Plan
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PlanDetailId { get; set; }
         public string Operator { get; set; }
+        public string Process { get; set; }
+        public string ControlNumber { get; set; }
+        public string Machines { get; set; }
         public string Condition { get; set; }
         public DateTime CreatedDate { get; set; }
-
         public int PlanHeaderId { get; set; }
         public PlanHeader PlanHeader { get; set; }
     }
@@ -24,6 +26,10 @@ namespace Monitoring4M1Ev2.Model.Plan
     {
         public string Operator { get; set; }
         public string Condition { get; set; }
+        public string Process { get; set; }
+        public string ControlNumber { get; set; }
+        public string Machines { get; set; }
         public int PlanHeaderId { get; set; }
     }
+
 }

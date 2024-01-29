@@ -70,8 +70,20 @@ namespace Monitoring4M1Ev2.Services
             _db.SaveChanges();
         }
 
+        public UserDetail LoginUser(LoginUser user)
+        {
+            return GetAllUserDetails().FirstOrDefault(u => u.Username.ToLower() == user.Username.ToLower());
+        }
 
-        
+        public bool CheckPassword(LoginUser user)
+        {
+            var userCred = LoginUser(user);
+            return VerifyPassword(user.Password, userCred.PasswordHash);
+
+        }
+
+
+
         private string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt());
@@ -81,5 +93,7 @@ namespace Monitoring4M1Ev2.Services
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
+
+        
     }
 }

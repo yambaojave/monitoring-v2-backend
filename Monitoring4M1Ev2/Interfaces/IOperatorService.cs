@@ -20,6 +20,7 @@ namespace Monitoring4M1Ev2.Interfaces
         // GETTING LIST OF DATA
         object GetOperator(string emplId);
         List<OperatorEvaluationPcs> GetOperatorQualificationPcsByEvalId(int evalId);
+        IEnumerable<object> GetOperatorByModel(string model);
 
         // DATA CHECKING
         bool CheckDataExists<T>(T data, string table) where T : IConvertible;

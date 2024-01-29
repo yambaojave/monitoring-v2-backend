@@ -13,5 +13,8 @@ namespace Monitoring4M1Ev2.Interfaces
         void AddUser(UserDetailDto dto, int currentUser);
         void AddNewLineForUser(int userDetailId, string[] Lines);
         void UpdatePassword(int userDetailId, string updatedPassword);
+
+        UserDetail LoginUser(LoginUser user);
+        bool CheckPassword(LoginUser user);
     }
 }
