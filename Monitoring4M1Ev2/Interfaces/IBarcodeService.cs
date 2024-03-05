@@ -12,7 +12,9 @@ namespace Monitoring4M1Ev2.Interfaces
         WorkgroupDetail GetWholeWorkGroupDetails(int id);
         string[] GetWorkGroupOperators(int id);
         string[] GetWorkGroupMachineTemplate(int id);
-        int GetLatestWorkGroupByLine(string line);
+        B2WORKGROUP GetLatestWorkGroupByLine(string line);
         B2ITEMMASTER GetItemDescription(string item);
+        List<B2BOM> GetAllBomRelation(string partnumber);
+        List<B2WORKGROUPDETAIL> GetWgDetails(int wgId);
     }
 }

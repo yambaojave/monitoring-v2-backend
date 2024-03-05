@@ -329,5 +329,15 @@ namespace Monitoring4M1Ev2.Services
 
             return opLists;
         }
+
+        public OperatorDetail GetOperatorById(string opId)
+        {
+            return _db.OperatorDetails.FirstOrDefault(e => e.OperatorEmployeeId == opId);
+        }
+
+        public List<OperatorQualification> GetQualification(int opdId, string model)
+        {
+            return _db.OperatorQualifications.Where(e => e.OperatorDetailId == opdId && e.Model == model && e.OverallAssessment == true && e.ForReassessment == false).ToList();
+        }
     }
 }

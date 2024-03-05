@@ -17,6 +17,10 @@ namespace Monitoring4M1Ev2.Interfaces
         object GetCurrentQualification(string empId);
         OperatorEvaluationPcs AddPcsResult(OperatorEvaluationPcsDto dto);
 
+
+        
+
+
         // GETTING LIST OF DATA
         object GetOperator(string emplId);
         List<OperatorEvaluationPcs> GetOperatorQualificationPcsByEvalId(int evalId);
@@ -35,5 +39,12 @@ namespace Monitoring4M1Ev2.Interfaces
         // DELETE
         void DeleteEvaluation(int evaluationId);
 
+
+
+
+
+        // Operator Checking
+        OperatorDetail GetOperatorById(string opId);
+        List<OperatorQualification> GetQualification(int opdId, string model);
     }
 }

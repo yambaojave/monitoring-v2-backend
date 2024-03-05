@@ -15,6 +15,7 @@ namespace Monitoring4M1Ev2.Model.Plan
         public string Model { get; set; }
         public int Shift { get; set; }
         public string Line { get; set; }
+        public string Type { get; set; }
         public bool IsUsed { get; set; }
         public DateTime UsedDate { get; set; }
         [DataType(DataType.Date)]

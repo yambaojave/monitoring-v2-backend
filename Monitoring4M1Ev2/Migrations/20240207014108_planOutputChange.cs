@@ -2,21 +2,22 @@
 
 namespace Monitoring4M1Ev2.Migrations
 {
-    public partial class modelheadcount : Migration
+    public partial class planOutputChange : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "ModelHeadCount",
-                table: "ProductionModels",
-                nullable: true);
+                name: "Plan",
+                table: "Outputs",
+                nullable: false,
+                defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ModelHeadCount",
-                table: "ProductionModels");
+                name: "Plan",
+                table: "Outputs");
         }
     }
 }

@@ -82,6 +82,23 @@ namespace Monitoring4M1Ev2.Services
 
         }
 
+        public string[] GetAvailLines()
+        {
+            return _db.Lines.Where(e => e.IsActive == true).Select(e => e.LineName).ToArray();
+        }
+
+        public void AddNewLine(Lines line)
+        {
+            var newLine = new Lines
+            {
+                LineName = line.LineName,
+                IsActive = true,
+                DateAdded = DateTime.Now
+            };
+
+            _db.Lines.Add(newLine);
+            _db.SaveChanges();
+        }
 
 
         private string HashPassword(string password)

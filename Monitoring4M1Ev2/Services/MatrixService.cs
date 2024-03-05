@@ -25,6 +25,7 @@ namespace Monitoring4M1Ev2.Services
             return _db.ProductionModels
                 .Include(e => e.WIMatrices)
                     .ThenInclude(e => e.OperationProcesses)
+                        .ThenInclude(op => op.Templates)
                 .ToList();
         }
 
@@ -35,7 +36,8 @@ namespace Monitoring4M1Ev2.Services
             {
                 ModelName = dto.ModelName,
                 ModelDescription = dto.ModelDescription,
-                ModelHeadCount = dto.ModelHeadCount
+                ModelHeadCount = dto.ModelHeadCount,
+                OutputPerHour = dto.OutputPerHour
             };
 
             _db.ProductionModels.Add(newModel);
@@ -222,6 +224,22 @@ namespace Monitoring4M1Ev2.Services
         public ProductionModel GetProductionModelByName(string model)
         {
             return _db.ProductionModels.Include(e => e.WIMatrices).ThenInclude(e => e.OperationProcesses).FirstOrDefault(e => e.ModelName == model);
+        }
+
+        public Template PostTemplate(TemplateDto dto)
+        {
+            var newTemplate = new Template
+            {
+                TemplateName = dto.TemplateName,
+                MachineId = dto.MachineId
+            };
+
+            _db.Templates.Add(newTemplate);
+            _db.SaveChanges();
+
+            ModelTimeUpdate(dto.PModelId);
+
+            return newTemplate;
         }
     }
 }

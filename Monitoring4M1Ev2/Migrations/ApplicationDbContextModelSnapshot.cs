@@ -30,7 +30,7 @@ namespace Monitoring4M1Ev2.Migrations
                     b.Property<int>("HeaderId");
 
                     b.Property<string>("Lighting")
-                        .HasMaxLength(5);
+                        .HasMaxLength(20);
 
                     b.Property<string>("Remark")
                         .HasMaxLength(255);
@@ -55,6 +55,10 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<DateTime>("DateAdded");
 
+                    b.Property<bool>("Finalized");
+
+                    b.Property<DateTime>("FinalizedDate");
+
                     b.Property<string>("Line");
 
                     b.Property<string>("Model");
@@ -66,6 +70,8 @@ namespace Monitoring4M1Ev2.Migrations
                     b.Property<int>("PlanId");
 
                     b.Property<int>("ShiftCode");
+
+                    b.Property<string>("Type");
 
                     b.Property<int>("WorkGroupId");
 
@@ -129,8 +135,6 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<string>("Status");
 
-                    b.Property<string>("Type");
-
                     b.HasKey("MachineId");
 
                     b.HasIndex("HeaderId");
@@ -164,6 +168,8 @@ namespace Monitoring4M1Ev2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ChangeRemark");
+
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<DateTime>("DateUpdated");
@@ -172,11 +178,7 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<int>("HeaderId");
 
-                    b.Property<string>("Name");
-
                     b.Property<string>("OperatorReplacementId");
-
-                    b.Property<string>("OperatorReplacementName");
 
                     b.Property<TimeSpan>("ReplacementTimeChange");
 
@@ -361,6 +363,64 @@ namespace Monitoring4M1Ev2.Migrations
                     b.ToTable("MethodSystemRemarks");
                 });
 
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Framework_4M_1E.MonitoringResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category");
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<int>("HeaderId");
+
+                    b.Property<string>("Machine");
+
+                    b.Property<string>("Man");
+
+                    b.Property<string>("Method");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HeaderId");
+
+                    b.ToTable("MonitoringResults");
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Framework_4M_1E.Output", b =>
+                {
+                    b.Property<int>("OutputId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Actual");
+
+                    b.Property<int>("Difference");
+
+                    b.Property<int>("HeaderId");
+
+                    b.Property<int>("Plan");
+
+                    b.Property<string>("Remarks");
+
+                    b.Property<string>("TimeRange");
+
+                    b.Property<DateTime>("UpdateDate");
+
+                    b.Property<bool>("Updated");
+
+                    b.Property<int>("UserInput");
+
+                    b.HasKey("OutputId");
+
+                    b.HasIndex("HeaderId");
+
+                    b.ToTable("Outputs");
+                });
+
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Framework_4M_1E.Trainee", b =>
                 {
                     b.Property<int>("TraineeId")
@@ -427,9 +487,34 @@ namespace Monitoring4M1Ev2.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<int>("OutputPerHour");
+
                     b.HasKey("PModelId");
 
                     b.ToTable("ProductionModels");
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.Template", b =>
+                {
+                    b.Property<int>("TemplateId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<DateTime>("DateUpdated");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("MachineId");
+
+                    b.Property<string>("TemplateName");
+
+                    b.HasKey("TemplateId");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("Templates");
                 });
 
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.WIMatrix", b =>
@@ -694,11 +779,30 @@ namespace Monitoring4M1Ev2.Migrations
 
                     b.Property<int>("Shift");
 
+                    b.Property<string>("Type");
+
                     b.Property<DateTime>("UsedDate");
 
                     b.HasKey("PlanHeaderId");
 
                     b.ToTable("PlanHeaders");
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.User.Lines", b =>
+                {
+                    b.Property<int>("LineId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("LineName");
+
+                    b.HasKey("LineId");
+
+                    b.ToTable("Lines");
                 });
 
             modelBuilder.Entity("Monitoring4M1Ev2.Model.User.UserDetail", b =>
@@ -853,6 +957,22 @@ namespace Monitoring4M1Ev2.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Framework_4M_1E.MonitoringResult", b =>
+                {
+                    b.HasOne("Monitoring4M1Ev2.Model.Framework_4M_1E.M4EHeader")
+                        .WithMany("MonitoringResults")
+                        .HasForeignKey("HeaderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Framework_4M_1E.Output", b =>
+                {
+                    b.HasOne("Monitoring4M1Ev2.Model.Framework_4M_1E.M4EHeader")
+                        .WithMany("Outputs")
+                        .HasForeignKey("HeaderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Monitoring4M1Ev2.Model.Framework_4M_1E.Trainee", b =>
                 {
                     b.HasOne("Monitoring4M1Ev2.Model.Framework_4M_1E.Man")
@@ -866,6 +986,14 @@ namespace Monitoring4M1Ev2.Migrations
                     b.HasOne("Monitoring4M1Ev2.Model.Matrix.WIMatrix", "WIMatrix")
                         .WithMany("OperationProcesses")
                         .HasForeignKey("WIId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Monitoring4M1Ev2.Model.Matrix.Template", b =>
+                {
+                    b.HasOne("Monitoring4M1Ev2.Model.Matrix.OperationProcess", "OperationProcess")
+                        .WithMany("Templates")
+                        .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

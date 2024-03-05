@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Monitoring4M1Ev2.Context;
 using Monitoring4M1Ev2.Interfaces;
+using Monitoring4M1Ev2.Model.Framework_4M_1E;
 using Monitoring4M1Ev2.Model.Matrix;
 using Monitoring4M1Ev2.Model.Operator;
 using Monitoring4M1Ev2.Model.Plan;
@@ -39,6 +40,7 @@ namespace Monitoring4M1Ev2.Services
                 Shift = dto.Shift,
                 Line = dto.Line,
                 IsUsed = false,
+                Type = dto.PlanDate == DateTime.Now.Date || ((dto.Shift == 5 || dto.Shift == 6) && dto.PlanDate == DateTime.Now.AddDays(-1).Date) ? "SUDDEN" : dto.PlanDate == DateTime.MinValue ? "CLONE" : "NORMAL",
                 PlanDate = dto.PlanDate,
                 CreatedBy = dto.CreatedBy,
                 CreatedDate = DateTime.Now
@@ -99,6 +101,7 @@ namespace Monitoring4M1Ev2.Services
             header.Shift = planHeader.Shift;
             header.Line = planHeader.Line;
             header.PlanDate = planHeader.PlanDate;
+            header.Type = planHeader.PlanDate == DateTime.Now.Date || ((planHeader.Shift == 5 || planHeader.Shift == 6) && planHeader.PlanDate == DateTime.Now.AddDays(-1).Date) ? "SUDDEN" : "NORMAL";
 
             await _db.SaveChangesAsync();
         }
@@ -137,6 +140,26 @@ namespace Monitoring4M1Ev2.Services
             }
 
             return newCloneList;
+        }
+
+        public async Task<PlanHeader> ExistingPlanHeader(M4EHeaderDto dto)
+        {
+            return await _db.PlanHeaders.Include(e => e.PlanDetails)
+                .FirstOrDefaultAsync(
+                    e => e.Model == dto.Model && 
+                    e.IsUsed == false && 
+                    e.PlanDate == DateTime.Now.Date &&
+                    e.Line == dto.Line &&
+                    e.Shift == dto.ShiftCode);
+        }
+
+        public async Task UpdateHeaderUsedStatus(int planId)
+        {
+            var header = await _db.PlanHeaders.FindAsync(planId);
+            header.IsUsed = true;
+            header.UsedDate = DateTime.Now;
+
+            await _db.SaveChangesAsync();
         }
     }
 }

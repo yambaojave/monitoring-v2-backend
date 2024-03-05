@@ -16,5 +16,7 @@ namespace Monitoring4M1Ev2.Interfaces
 
         UserDetail LoginUser(LoginUser user);
         bool CheckPassword(LoginUser user);
+        string[] GetAvailLines();
+        void AddNewLine(Lines line);
     }
 }

@@ -14,11 +14,19 @@ namespace Monitoring4M1Ev2.Model.Framework_4M_1E
         public int EnvironmentId { get; set; }
         [Column(TypeName = "decimal(4,1)")]
         public decimal Temperature { get; set; }
-        [MaxLength(5)]
+        [MaxLength(20)]
         public string Lighting { get; set; }
         [MaxLength(255)]
         public string Remark { get; set; }
         public DateTime DateAdded { get; set; }
+        public int HeaderId { get; set; }
+    }
+
+    public class EnvironmentDto
+    {
+        public decimal Temperature { get; set; }
+        public string Lighting { get; set; }
+        public string Remark { get; set; }
         public int HeaderId { get; set; }
     }
 }

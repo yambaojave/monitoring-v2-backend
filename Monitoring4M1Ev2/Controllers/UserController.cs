@@ -103,6 +103,19 @@ namespace Monitoring4M1Ev2.Controllers
             return Ok();
         }
 
+        [HttpGet("lines")]
+        public ActionResult GetAvailLines()
+        {
+            return Ok(_userService.GetAvailLines());
+        }
+
+        [HttpPost("lines")]
+        public ActionResult PostAvailLines([FromBody] Lines line)
+        {
+            _userService.AddNewLine(line);
+            return Ok();
+        }
+
 
 
 

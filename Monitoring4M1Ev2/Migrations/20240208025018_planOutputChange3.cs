@@ -2,21 +2,21 @@
 
 namespace Monitoring4M1Ev2.Migrations
 {
-    public partial class planProcess : Migration
+    public partial class planOutputChange3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Process",
-                table: "PlanDetails",
+                name: "Remarks",
+                table: "Outputs",
                 nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Process",
-                table: "PlanDetails");
+                name: "Remarks",
+                table: "Outputs");
         }
     }
 }

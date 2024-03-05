@@ -53,6 +53,16 @@ namespace Monitoring4M1Ev2.Controllers
         {
             try
             {
+                if(dto.PlanDate < DateTime.Now.Date && dto.Shift != 5 && dto.Shift != 6)
+                {
+                    return BadRequest(new { error = "Plan Date should be current or pass current date." });
+                }
+
+                if(dto.PlanDate < DateTime.Now.AddDays(-1).Date)
+                {
+                    return BadRequest(new { error = "Plan Date error." });
+                }
+
                 if (!_matrixService.ModelExisting(dto.Model))
                 {
                     return NotFound(new { error = $"Model {dto.Model} does not exists. Kindly check matrix or whitespaces." });
@@ -157,6 +167,16 @@ namespace Monitoring4M1Ev2.Controllers
         {
             try
             {
+                if (planHeader.PlanDate < DateTime.Now.Date && planHeader.Shift != 5 && planHeader.Shift != 6)
+                {
+                    return BadRequest(new { error = "Plan Date should be current or pass current date." });
+                }
+
+                if (planHeader.PlanDate < DateTime.Now.AddDays(-1).Date)
+                {
+                    return BadRequest(new { error = "Plan Date error." });
+                }
+
                 if (!_matrixService.ModelExisting(planHeader.Model))
                 {
                     return NotFound(new { error = $"Model {planHeader.Model} does not exists. Kindly check matrix or whitespaces." });

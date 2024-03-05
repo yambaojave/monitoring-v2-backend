@@ -25,6 +25,7 @@ namespace Monitoring4M1Ev2.Interfaces
         ProductionModel PostProductionModel(ProductionModelDto dto);
         WIMatrix PostWIMatrix(WIMatrixDto dto);
         OperationProcess PostOperationProcess(OperationProcessDto dto);
+        Template PostTemplate(TemplateDto dto);
 
         /*
          *  UPDATE 

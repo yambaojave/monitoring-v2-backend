@@ -26,4 +26,13 @@ namespace Monitoring4M1Ev2.Model.Framework_4M_1E
         public List<MaterialSystemRemark> MaterialSystemRemarks { get; set; }
 
     }
+
+    public class MaterialDto
+    {
+        public string Component { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public string Status { get; set; }
+        public int HeaderId { get; set; }
+    }
 }

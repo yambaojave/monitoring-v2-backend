@@ -22,9 +22,25 @@ namespace Monitoring4M1Ev2
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        //public Startup(IConfiguration configuration)
+        //{
+        //    Configuration = configuration;
+        //}
+
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            //Setup for ENVIRONMENT startup
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
+
+            // Checking of environment the application is on
+            var environment = Configuration["ApplicationSettings:Environment"];
+
+            Console.WriteLine(environment); // Debug -> Monitoring4M1Ev2 Properties -> Check ASPNETCORE_ENVIRONMENT (Change depending on the Database you want to work with)
         }
 
         public IConfiguration Configuration { get; }

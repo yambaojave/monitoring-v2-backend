@@ -28,5 +28,10 @@ namespace Monitoring4M1Ev2.Model.Operator
         public string OperatorName { get; set; }
     }
 
+    public class OperatorCheckDto
+    {
+        public int HeaderId { get; set; }
+        public string OperatorEmployeeId { get; set; }
+    }
     
 }

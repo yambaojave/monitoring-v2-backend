@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Monitoring4M1Ev2.Model.Framework_4M_1E;
 using Monitoring4M1Ev2.Model.Plan;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,10 @@ namespace Monitoring4M1Ev2.Interfaces
         Task DeleteDetailASync(int id);
 
         Task UpdateHeaderById(PlanHeader planHeader);
+
+        Task<PlanHeader> ExistingPlanHeader(M4EHeaderDto dto);
+
+        Task UpdateHeaderUsedStatus(int planId);
 
     }
 }

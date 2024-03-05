@@ -32,4 +32,13 @@ namespace Monitoring4M1Ev2.Model.Plan
         public int PlanHeaderId { get; set; }
     }
 
+    public class PlanGroupDetail
+    {
+        public string Operator { get; set; }
+        public string Process { get; set; }
+        public string ControlNumber { get; set; }
+        public string Machine { get; set; }
+        public string Condition { get; set; }
+    }
+
 }

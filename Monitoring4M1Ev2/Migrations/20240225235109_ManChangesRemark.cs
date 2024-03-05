@@ -2,21 +2,21 @@
 
 namespace Monitoring4M1Ev2.Migrations
 {
-    public partial class UserOperatorId : Migration
+    public partial class ManChangesRemark : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "OperatorEmployeeId",
-                table: "UserDetails",
+                name: "ChangeRemark",
+                table: "Mans",
                 nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "OperatorEmployeeId",
-                table: "UserDetails");
+                name: "ChangeRemark",
+                table: "Mans");
         }
     }
 }

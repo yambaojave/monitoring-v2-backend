@@ -7,23 +7,24 @@ using System.Threading.Tasks;
 
 namespace Monitoring4M1Ev2.Model.Matrix
 {
-    public class OperationProcess
+    public class Template
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int MachineId { get; set; }
-        public string OperationName { get; set; }
+        public int TemplateId { get; set; }
+        public string TemplateName { get; set; }
         public DateTime DateAdded { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
         public DateTime DateUpdated { get; set; }
-        public int WIId { get; set; }
-        public WIMatrix WIMatrix { get; set; }
-        public List<Template> Templates { get; set; }
+        public int MachineId { get; set; }
+        public OperationProcess OperationProcess { get; set; }
     }
 
-    public class OperationProcessDto
+    public class TemplateDto
     {
-        public string OperationName { get; set; }
-        public int WIId { get; set; }
+        public string TemplateName { get; set; }
+        public int MachineId { get; set; }
+        public int PModelId { get; set; }
     }
+
 }

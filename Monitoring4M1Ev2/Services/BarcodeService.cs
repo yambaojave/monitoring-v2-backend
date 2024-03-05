@@ -43,7 +43,7 @@ namespace Monitoring4M1Ev2.Services
             };
 
             return newGrouping;
-    }
+        }
 
         public string[] GetWorkGroupOperators(int id)
         {
@@ -74,9 +74,9 @@ namespace Monitoring4M1Ev2.Services
             return newArray;
         }
 
-        public int GetLatestWorkGroupByLine(string line)
+        public B2WORKGROUP GetLatestWorkGroupByLine(string line)
         {
-            return _db.B2WORKGROUP.Where(e => e.lines == line).OrderByDescending(e => e.id).Select(e => e.id).FirstOrDefault();
+            return _db.B2WORKGROUP.Where(e => e.lines == line).OrderByDescending(e => e.id).FirstOrDefault();
         }
 
 
@@ -90,6 +90,16 @@ namespace Monitoring4M1Ev2.Services
         public B2ITEMMASTER GetItemDescription(string item)
         {
             return _db.B2ITEMMASTER.Where(e => e.ITEMNO == item).FirstOrDefault();
+        }
+
+        public List<B2BOM> GetAllBomRelation(string partnumber)
+        {
+            return _db.B2BOM.AsNoTracking().Where(e => e.BOMCode == partnumber && e.EndEffective == null).ToList();
+        }
+
+        public List<B2WORKGROUPDETAIL> GetWgDetails(int wgId)
+        {
+            return _db.B2WORKGROUPDETAIL.Where(e => e.workgroupId == wgId).ToList();
         }
     }
 }

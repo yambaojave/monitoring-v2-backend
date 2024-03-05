@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Monitoring4M1Ev2.Interfaces;
@@ -17,11 +18,13 @@ namespace Monitoring4M1Ev2.Controllers
     {
         private readonly IOperatorService _operatorService;
         private readonly IMatrixService _matrixService;
+        private readonly IM4EService _m4EService;
 
-        public OperatorController(IOperatorService operatorService, IMatrixService matrixService)
+        public OperatorController(IOperatorService operatorService, IMatrixService matrixService, IM4EService m4EService)
         {
             _operatorService = operatorService;
             _matrixService = matrixService;
+            _m4EService = m4EService;
         }
 
         [HttpGet("all")]
@@ -60,6 +63,7 @@ namespace Monitoring4M1Ev2.Controllers
         }
 
         [HttpPost("qualification")]
+        [Authorize(Roles = "ADMIN, LEADER")]
         public ActionResult PostQualification([FromBody] OperatorQualificationDto dto)
         {
             //if (_operatorService.CheckDataExists(dto.OperatorDetailId, "QUALIFICATION"))
@@ -225,6 +229,34 @@ namespace Monitoring4M1Ev2.Controllers
             }
 
         }
+
+        [HttpPost("opcheck")]
+        public async Task<ActionResult> OperatorCheck(OperatorCheckDto dto)
+        {
+            try
+            {
+                var opExists = _operatorService.GetOperatorById(dto.OperatorEmployeeId);
+                if(opExists == null)
+                {
+                    return NotFound(new { error = $"{dto.OperatorEmployeeId} not found." } );
+                }
+
+                var hd = await _m4EService.GetHeaderById(dto.HeaderId);
+                var qualifications = _operatorService.GetQualification(opExists.OperatorDetailId, hd.Model);
+
+                if(qualifications.Count == 0)
+                {
+                    return NotFound(new { error = $"{dto.OperatorEmployeeId} is not qualified for this model {hd.Model}." });
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
+
 
     }
 }

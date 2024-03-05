@@ -51,7 +51,7 @@ namespace Monitoring4M1Ev2.Controllers
 
         // Getting of the latest workgroup created from barcode system
         [HttpGet("latestwg/{line}")]
-        public ActionResult<int> GetLatestWG(string line)
+        public ActionResult<B2WORKGROUP> GetLatestWG(string line)
         {
             return Ok(_bcService.GetLatestWorkGroupByLine(line));
         }

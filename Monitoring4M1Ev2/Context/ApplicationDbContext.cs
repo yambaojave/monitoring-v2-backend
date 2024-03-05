@@ -20,7 +20,12 @@ namespace Monitoring4M1Ev2.Context
          */
         public DbSet<UserDetail> UserDetails { get; set; }
         public DbSet<UserLine> UserLines { get; set; }
+        public DbSet<Lines> Lines { get; set; }
 
+
+        public DbSet<Output> Outputs { get; set; }
+
+        public DbSet<MonitoringResult> MonitoringResults { get; set; }
         /*
          *  Operator Dataset
          */
@@ -61,6 +66,6 @@ namespace Monitoring4M1Ev2.Context
         public DbSet<OperationProcess> OperationProcesses { get; set; }
         public DbSet<ProductionModel> ProductionModels { get; set; }
         public DbSet<WIMatrix> WIMatrices { get; set; }
-
+        public DbSet<Template> Templates { get; set; }
     }
 }
